@@ -8,8 +8,33 @@ namespace TietokantaTesti
     {
         static void Main(string[] args)
         {
+            string server = "", database = "", uid = "", password = "";
+            Console.WriteLine("Use credentials?(y/n)");
+            string ans = Console.ReadLine();
+            if(ans == "n")
+            {
+                server = "localhost";
+                database = "Pelianalytiikka";
+                uid = "valtteri"; // change me
+                password = "password"; // and me
+            }
+            else if(ans == "y")
+            {
+                // auth
+                Console.WriteLine("Enter server ip:");
+                server = Console.ReadLine();
+                Console.WriteLine("Enter database name:");
+                database = Console.ReadLine();
+                Console.WriteLine("Enter uid:"); 
+                uid = Console.ReadLine();
+                Console.WriteLine("Enter password:");
+                password = Console.ReadLine();
+            }
+            else
+                Console.WriteLine("Type again");
+                
+            QueryTool tool = new QueryTool(server, database, uid, password);
             Console.WriteLine("Tietokannan taulut:");
-            QueryTool tool = new QueryTool();
             Console.WriteLine("");
 
             bool loop = true;
@@ -34,9 +59,9 @@ namespace TietokantaTesti
         string input;
 
         // initializing QueryTool in constuctor
-        public QueryTool()
+        public QueryTool(string server, string database, string uid, string password)
         {
-            connectionString = "server=localhost;database=Pelianalytiikka;uid=valtteri;pwd=password;SSL Mode=0"; 
+            connectionString = "server=" + server + ";database=" + database + ";uid=" + uid + ";pwd=" + password  + ";SSL Mode=0"; 
             Connect();
             getDatabases();
         }
