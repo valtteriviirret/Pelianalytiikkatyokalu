@@ -1,0 +1,8 @@
+.vscode
+bin
+net5.0
+netstandard2.0
+netstandard2.1
+obj
+v4.5.2
+v4.8
