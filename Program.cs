@@ -49,6 +49,7 @@ namespace TietokantaTesti
                 switch(input)
                 {
                     case "keskiostos": tool.AverageBuy(); break;
+                    case "mediaaniostos": tool.MedianBuy(); break;
                     default: tool.AssingQuery(); break;
                 }
 
@@ -148,6 +149,26 @@ namespace TietokantaTesti
             reader.Close();
             a = (sum / fc);
             Console.WriteLine(Math.Round(a, 4));
+        }
+
+        public void MedianBuy()
+        {
+            MySqlCommand cmd = new MySqlCommand("select summa from Rahasiirto", cnn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            int size = 0, mid = 0;
+            double median;
+            List<double> nums = new List<double>();
+
+            while(reader.Read())
+                for(int i = 0; i < reader.FieldCount; i++)
+                    nums.Add(reader.GetDouble(i));
+            
+            reader.Close();
+            nums.Sort();
+            size = nums.Count;
+            mid = size / 2;
+            median = (size % 2 != 0) ? nums[mid] : (nums[mid] + nums[mid - 1]) / 2;
+            Console.WriteLine(Math.Round(median, 4));
         }
     }
 } 
