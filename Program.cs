@@ -33,9 +33,8 @@ namespace TietokantaTesti
             else
                 Console.WriteLine("Type again");
                 
+            Console.WriteLine("All tables in this database:");
             QueryTool tool = new QueryTool(server, database, uid, password);
-            Console.WriteLine("Tietokannan taulut:");
-            Console.WriteLine("");
 
             bool loop = true;
             while(loop)
@@ -46,8 +45,13 @@ namespace TietokantaTesti
                     loop = false;                
                 
                 // here assign the input
-                tool.setInput(input); 
-                tool.AssingQuery();
+                tool.setInput(input);
+                switch(input)
+                {
+                    case "keskiostos": tool.AverageBuy(); break;
+                    default: tool.AssingQuery(); break;
+                }
+
             }
         }
     }
@@ -82,6 +86,7 @@ namespace TietokantaTesti
                 for(int i = 0; i < reader.FieldCount; i++)
                     Console.WriteLine(reader[i]);
             }
+            Console.WriteLine("");
             reader.Close();
         }
 
@@ -124,6 +129,25 @@ namespace TietokantaTesti
         {
             MySqlCommand cmd = new MySqlCommand(input, cnn);
             cmd.ExecuteNonQuery();
+        }
+
+        public void AverageBuy()
+        {
+            MySqlCommand cmd = new MySqlCommand("select summa from Rahasiirto", cnn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            double sum = 0, a = 0;
+            int fc = 0;
+            while(reader.Read())
+            {
+                for(int i = 0; i < reader.FieldCount; i++)
+                {
+                    sum += reader.GetDouble(i);
+                    fc++;
+                }
+            }
+            reader.Close();
+            a = (sum / fc);
+            Console.WriteLine(Math.Round(a, 4));
         }
     }
 } 
