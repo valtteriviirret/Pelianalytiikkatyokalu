@@ -51,6 +51,8 @@ namespace TietokantaTesti
                     case "keskiostos": tool.AverageBuy(); break;
                     case "mediaaniostos": tool.MedianBuy(); break;
                     case "keskipeliaika": tool.AveragePlaytime(); break;
+                    case "rahasiirrot": tool.DaysTransActions(); break;
+                    case "sessiot": tool.CurrentSessions(); break;
                     default: tool.AssingQuery(); break;
                 }
 
@@ -92,7 +94,6 @@ namespace TietokantaTesti
             reader.Close();
         }
 
-
         void Connect()
         {
             cnn = new MySqlConnection(connectionString);
@@ -132,11 +133,17 @@ namespace TietokantaTesti
             MySqlCommand cmd = new MySqlCommand(input, cnn);
             cmd.ExecuteNonQuery();
         }
+        
+        MySqlDataReader Helper(string query)
+        {
+            MySqlCommand cmd = new MySqlCommand(query, cnn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            return reader;
+        }
 
         public void AverageBuy()
         {
-            MySqlCommand cmd = new MySqlCommand("select summa from Rahasiirto", cnn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            MySqlDataReader reader = Helper("select summa from Rahasiirto");
             double sum = 0, a = 0;
             int fc = 0;
             while(reader.Read())
@@ -154,8 +161,7 @@ namespace TietokantaTesti
 
         public void MedianBuy()
         {
-            MySqlCommand cmd = new MySqlCommand("select summa from Rahasiirto", cnn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            MySqlDataReader reader = Helper("select summa from Rahasiirto");
             int size = 0, mid = 0;
             double median;
             List<double> nums = new List<double>();
@@ -174,8 +180,7 @@ namespace TietokantaTesti
 
         public void AveragePlaytime()
         {
-            MySqlCommand cmd = new MySqlCommand("select alkuaika, loppuaika from Pelisessio", cnn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            MySqlDataReader reader = Helper("select alkuaika, loppuaika from Pelisessio");
             List<DateTime> nums = new List<DateTime>();
             List<DateTime> starts = new List<DateTime>();
             List<DateTime> ends = new List<DateTime>();
@@ -202,6 +207,38 @@ namespace TietokantaTesti
             for(int i = 0; i < values.Count; i++)
                 alltime += values[i];
             Console.WriteLine(alltime / values.Count);
+        }
+
+        public void CurrentSessions()
+        {
+            MySqlDataReader reader = Helper("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =\"\"");
+            List<int> nums = new List<int>();
+
+            while(reader.Read())
+                for(int i = 0; i < reader.FieldCount; i++)
+                    nums.Add(reader.GetInt32(i));
+            
+            reader.Close();
+            for(int i = 0; i < nums.Count; i++)
+                Console.WriteLine(nums[i]);
+        }
+
+        public void DaysTransActions()
+        {
+            DateTime selected;
+            string input;
+            Console.WriteLine("Type the day(DD/MM/YYYY)");
+            input = Console.ReadLine();
+            selected = Convert.ToDateTime(input);
+            MySqlDataReader reader = Helper("select summa from Rahasiirto where aikaleima =" + selected);
+            while(reader.Read())
+            {
+                for(int i = 0; i < reader.FieldCount; i++)
+                {
+                    Console.WriteLine(reader[i]);
+                }
+            }
+            reader.Close();
         }
     }
 } 
