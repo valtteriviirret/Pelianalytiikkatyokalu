@@ -181,37 +181,39 @@ namespace TietokantaTesti
         public void AveragePlaytime()
         {
             MySqlDataReader reader = Helper("select alkuaika, loppuaika from Pelisessio");
-            List<DateTime> nums = new List<DateTime>();
             List<DateTime> starts = new List<DateTime>();
             List<DateTime> ends = new List<DateTime>();
             List<TimeSpan> values = new List<TimeSpan>();
-            TimeSpan alltime = new TimeSpan(0, 0, 0); 
+            TimeSpan alltime = new TimeSpan(0, 0, 0);
 
+            int n = 0;
             while(reader.Read())
                 for(int i = 0; i < reader.FieldCount; i++)
-                    nums.Add(reader.GetDateTime(i));
+                {
+                    // add to lists
+                    if(n % 2 == 0)
+                        starts.Add(reader.GetDateTime(i));
+                    else
+                        if(!reader.IsDBNull(i))
+                            ends.Add(reader.GetDateTime(i));
+                    n++;
+                }
             
             reader.Close();
-            int n = 0;
-            for(int i = 0; i < nums.Count; i++)
-            {
-                if(n % 2 != 0)
-                    starts.Add(nums[i]);
-                else
-                    ends.Add(nums[i]);
-                n++;
-            }
-            for(int i = 0; i < starts.Count; i++)
-                values.Add(starts[i].Subtract(ends[i]));
             
+            // make a list of time's of all sessions
+            for(int i = 0; i < ends.Count; i++)
+                values.Add(ends[i].Subtract(starts[i]));
+
             for(int i = 0; i < values.Count; i++)
                 alltime += values[i];
+            
             Console.WriteLine(alltime / values.Count);
         }
 
         public void CurrentSessions()
         {
-            MySqlDataReader reader = Helper("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =\"\"");
+            MySqlDataReader reader = Helper("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =" + null);
             List<int> nums = new List<int>();
 
             while(reader.Read())
