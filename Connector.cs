@@ -18,6 +18,10 @@ public class Connector
     {
         cnn = new MySqlConnection(connectionString);
         cnn.Open();
+
+        MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8", cnn);
+        int n = setcmd.ExecuteNonQuery();
+        setcmd.Dispose();
     } 
 
     public static MySqlConnection GetConnection() { return cnn; }
