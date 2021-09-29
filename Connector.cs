@@ -19,12 +19,13 @@ public class Connector
         cnn = new MySqlConnection(connectionString);
         cnn.Open();
 
-        MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8", cnn);
+        // changed encoding
+        MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
         int n = setcmd.ExecuteNonQuery();
         setcmd.Dispose();
     } 
 
-    public static MySqlConnection GetConnection() { return cnn; }
+    public static MySqlConnection GetConnection() => cnn; 
     
     // get table names in selected database
     void getDatabases()

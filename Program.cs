@@ -44,7 +44,6 @@ namespace TietokantaTesti
                 
                 RawSqlFunctions rsqlf = new RawSqlFunctions();
                 rsqlf.AssingQuery(input);                
-                
             }
         }
     }
