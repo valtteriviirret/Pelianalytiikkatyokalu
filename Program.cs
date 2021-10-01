@@ -13,8 +13,8 @@ namespace TietokantaTesti
             {
                 server = "localhost";
                 database = "Pelianalytiikka";
-                uid = "valtteri"; // change me
-                password = "password"; // and me
+                uid = "root"; // change me
+                password = "root"; // and me
             }
             else if(ans == "y")
             {
