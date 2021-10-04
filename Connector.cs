@@ -18,30 +18,30 @@ public class Connector
 
     void Connect()
     {
-        string CreateDatabase;
-        cnn = new MySqlConnection(connectionString);
-        
         bool dbexist = CheckDatabaseExists(cnn, database);
 
-        if(!dbexist)
+        if(dbexist)
         {
-            CreateDatabase = "CREATE DATABASE " + database + " ; ";
-            MySqlCommand command = new MySqlCommand(CreateDatabase, cnn);
+            MySqlConnection newcon = new MySqlConnection("Server=localhost;Integrated security=SSPI;database=master");
+            String str = "CREATE DATABASE " + database  + ";";
+            MySqlCommand cmd = new MySqlCommand(str, newcon);
             try
             {
-                cnn.Open();
-                command.ExecuteNonQuery();
+                newcon.Open();
+                cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+
+            catch(Exception ex)
             {
                 Console.WriteLine(ex);
-            } 
+            }
         }
+        
         else
         {
+            cnn = new MySqlConnection(connectionString);
             cnn.Open();
         }     
-
     
         // changed encoding
         MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
