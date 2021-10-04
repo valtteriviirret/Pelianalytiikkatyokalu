@@ -30,7 +30,7 @@ namespace TietokantaTesti
             }
             else
                 Console.WriteLine("Type again");
-                
+            
             Console.WriteLine("All tables in this database:");
             Connector connector = new Connector(server, database, uid, password);
 
