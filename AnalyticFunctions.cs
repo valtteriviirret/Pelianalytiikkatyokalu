@@ -99,4 +99,30 @@ public class AnalyticFunctions
         }
         reader.Close();
     }
+
+    public static void CompletePercent(MySqlDataReader reader)
+    {
+        //Kaikkien pelisessioiden tasojen lopetus suhteessa tasojen aloitukseen
+        int started = 0;
+        int ended = 0;
+        float percent = 0.1f;
+
+        while(reader.Read()) {
+            for(int i = 0; i < reader.FieldCount; i++) {
+                int temp = reader.GetInt32(i);
+                if(temp == 1) {
+                    started++;
+                } else {
+                    ended++;
+                }
+            }
+        }
+        if (started == 0 && ended == 0) {
+            percent = 0;
+        } else {
+            percent = (float)ended / started * 100;
+        }
+        Console.WriteLine("läpäisyprosentti on: " + Math.Round(percent, 1) + "%");
+        reader.Close();
+    }
 }
