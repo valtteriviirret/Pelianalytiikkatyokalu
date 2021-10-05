@@ -73,15 +73,10 @@ public class AnalyticFunctions
     
     public static void CurrentSessions(MySqlDataReader reader)
     {
-        int a = 0;
         while(reader.Read())
             for(int i = 0; i < reader.FieldCount; i++)
-            {
-                //if(a % 3 != 0)
-                    if(reader.IsDBNull(i))
-                        Console.WriteLine("Sessio id: " + reader[i - 2] + " Sessio aloitettu: " + reader[i - 1]);
-                //a++;
-            }
+                if(reader.IsDBNull(i))
+                    Console.WriteLine("Sessio id: " + reader[i - 2] + " Sessio aloitettu: " + reader[i - 1]);
         reader.Close();
     }
 
