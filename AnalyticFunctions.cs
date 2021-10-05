@@ -73,42 +73,16 @@ public class AnalyticFunctions
     
     public static void CurrentSessions(MySqlDataReader reader)
     {
-        //List<int> nums = new List<int>();
-        int a = 0, b = 0;
-        bool readthis = false;
+        int a = 0;
         while(reader.Read())
-        {
             for(int i = 0; i < reader.FieldCount; i++)
             {
                 if(a % 3 != 0)
-                {
-                    Console.WriteLine(reader[i]);
-                    if(b % 2 != 0)
-                    {
-                        if(reader.IsDBNull(i))
-                        {
-                            readthis = true;
-                        }
-                    }
-                    else
-                    {
-                        if(readthis)
-                        {
-                            Console.WriteLine("Aloitusaika" + reader[i]);
-                            readthis = false;
-                        }
-                    }
-                    b++;
-                }
-                //Console.WriteLine(reader[i]);
+                    if(reader.IsDBNull(i))
+                        Console.WriteLine("Sessio id: " + reader[i - 2] + " Sessio aloitettu: " + reader[i - 1]);
                 a++;
             }
-        }
-        //        nums.Add(reader.GetInt32(i));
-        
         reader.Close();
-        //for(int i = 0; i < nums.Count; i++)
-        //    Console.WriteLine(nums[i]);
     }
 
     public static void DaysTransActions(MySqlDataReader reader)
