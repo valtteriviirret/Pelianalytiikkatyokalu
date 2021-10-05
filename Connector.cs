@@ -22,6 +22,9 @@ public class Connector
 
         if(dbexist)
         {
+
+            // this project has been abandoned
+
             MySqlConnection newcon = new MySqlConnection("Server=localhost;Integrated security=SSPI;database=master");
             String str = "CREATE DATABASE " + database  + ";";
             MySqlCommand cmd = new MySqlCommand(str, newcon);

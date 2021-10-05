@@ -13,8 +13,8 @@ namespace TietokantaTesti
             {
                 server = "localhost";
                 database = "Pelianalytiikka";
-                uid = "root"; // change me
-                password = "root"; // and me
+                uid = "valtteri"; // change me
+                password = "password"; // and me
             }
             else if(ans == "y")
             {
@@ -34,13 +34,12 @@ namespace TietokantaTesti
             Console.WriteLine("All tables in this database:");
             Connector connector = new Connector(server, database, uid, password);
 
-            bool loop = true;
-            while(loop)
+            while(true)
             {
-                Console.WriteLine("Enter command or \"q\" to quit: ");
+                Console.WriteLine("Enter command, \"q\" to quit or \"help\" : ");
                 string input = Console.ReadLine();
                 if(input == "q")
-                    loop = false;
+                    break;
                 
                 RawSqlFunctions rsqlf = new RawSqlFunctions();
                 rsqlf.AssingQuery(input);                

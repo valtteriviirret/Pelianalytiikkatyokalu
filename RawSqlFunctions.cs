@@ -22,6 +22,7 @@ public class RawSqlFunctions
             //case "rahasiirrot": SelectQuery("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =" + null, 4); break;
             //case "sessiot": SelectQuery(input, 5); break;
             case "läpäisyprosentti": SelectQuery("select tapahtuma_tyyppi_id from pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
+            case "help" : Help(); break;
             default: break;
         }
     }
@@ -57,5 +58,17 @@ public class RawSqlFunctions
                 Console.Write(reader[i] + "\n");
         reader.Close();
     }
+
+    void Help()
+    {
+        Console.WriteLine("Kaikki mahdolliset kyselyt mitä mitä ohjelmassa voi toteuttaa");
+        Console.WriteLine("Pelin keskiostos -> \"keskiostos\"");
+        Console.WriteLine("Pelin mediaaniostos -> \"mediaaniostos\"");
+        Console.WriteLine("Pelin keskipeliaika -> \"keskipeliaika\"");
+        // rahasiirrot
+        // sessiot
+        Console.WriteLine("Pelin läpäilyprosentti -> \"läpäisyprosentti\"");
+    }
+
 }
 
