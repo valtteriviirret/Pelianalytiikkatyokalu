@@ -77,10 +77,10 @@ public class AnalyticFunctions
         while(reader.Read())
             for(int i = 0; i < reader.FieldCount; i++)
             {
-                if(a % 3 != 0)
+                //if(a % 3 != 0)
                     if(reader.IsDBNull(i))
                         Console.WriteLine("Sessio id: " + reader[i - 2] + " Sessio aloitettu: " + reader[i - 1]);
-                a++;
+                //a++;
             }
         reader.Close();
     }
