@@ -21,7 +21,8 @@ public class RawSqlFunctions
             case "keskipeliaika": SelectQuery("select alkuaika, loppuaika from Pelisessio", 3); break;
             //case "rahasiirrot": SelectQuery("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =" + null, 4); break;
             //case "sessiot": SelectQuery(input, 5); break;
-            case "läpäisyprosentti": SelectQuery("select tapahtuma_tyyppi_id from pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
+            case "läpäisyprosentti": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
+            case "peli": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;
             case "help" : Help(); break;
             default: break;
         }
@@ -40,6 +41,7 @@ public class RawSqlFunctions
             case 4: AnalyticFunctions.CurrentSessions(reader); break;
             case 5: AnalyticFunctions.DaysTransActions(reader); break;
             case 6: AnalyticFunctions.CompletePercent(reader); break;
+            case 7: AnalyticFunctions.GameInfo(reader); break;
             default: DefaultSelect(query, reader); break;
         }
     }
@@ -68,6 +70,7 @@ public class RawSqlFunctions
         // rahasiirrot
         // sessiot
         Console.WriteLine("Pelin läpäilyprosentti -> \"läpäisyprosentti\"");
+        Console.WriteLine("Tietoja tietystä pelistä -> \"peli\"");
     }
 
 }

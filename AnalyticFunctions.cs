@@ -122,7 +122,87 @@ public class AnalyticFunctions
         } else {
             percent = (float)ended / started * 100;
         }
-        Console.WriteLine("läpäisyprosentti on: " + Math.Round(percent, 1) + "%");
+        Console.WriteLine("Kenttiä aloitettu " + started + ", kenttiä läpäisty " + started);
+        Console.WriteLine("Läpäisyprosentti on: " + Math.Round(percent, 1) + "%");
         reader.Close();
+    }
+
+    public static void GameInfo(MySqlDataReader reader)
+    {
+        List<int> ids = new List<int>();
+        List<string> names = new List<string>(); 
+
+        int n = 0;
+        while(reader.Read())
+            for(int i = 0; i < reader.FieldCount; i++)
+            {
+                // add to lists
+                if(n % 2 == 0)
+                    ids.Add(reader.GetInt32(i));
+                else
+                    names.Add(reader.GetString(i));
+                n++;
+
+            }
+        reader.Close();
+
+        for(int i = 0; i < ids.Count; i++)
+            Console.WriteLine(ids[i] + " : " + names[i]);
+
+        SpecificGame();
+    }
+
+    static void SpecificGame()
+    {
+        MySqlConnection cnn = Connector.GetConnection();
+
+        Console.WriteLine("Valitse peli id:n perusteella");
+        string id;
+        id = Console.ReadLine();
+        string query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
+                        FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id ={0}
+                        AND Pelaaja.pelaaja_id = Pelisessio.pelisessio_pelaaja_id;", id);
+        
+        List<string> list = new List<string>();
+        
+        MySqlCommand cmd = new MySqlCommand(query, cnn);
+        MySqlDataReader reader = cmd.ExecuteReader();
+        
+        string pelistudio = "";
+        Console.WriteLine("Pelisessiot pelille: \n");
+        int r = 0, n = 0, a = 0, b = 0;
+        while(reader.Read())
+        {
+            pelistudio = reader.GetString(0);
+            for(int i = 0; i < reader.FieldCount; i++)
+            {
+                if(n % 5 != 0)
+                {
+                    if(r % 4 != 0)
+                    {
+                        if(a % 3 != 0)
+                        {
+                            if(b % 2 != 0)
+                                Console.WriteLine("Sukunimi: " + reader[i] + "\n");
+                            else
+                                Console.WriteLine("Etunimi: " + reader[i]);
+                            b++;
+                        }
+                        else
+                            Console.WriteLine("Pelaajan id: " + reader[i]);
+                        a++;
+                    }
+                    else
+                        Console.WriteLine("Session id: " + reader[i]);
+                    r++;
+                }
+                n++;
+            }
+        }
+        reader.Close();
+        int sessioM = b / 2;
+
+        Console.WriteLine("Pelistudio: " + pelistudio);
+        Console.WriteLine("Sessioita yhteensä: " + sessioM);
     }
 }
