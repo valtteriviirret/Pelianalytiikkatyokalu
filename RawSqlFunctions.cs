@@ -20,7 +20,7 @@ public class RawSqlFunctions
             case "mediaaniostos": SelectQuery("select summa from Rahasiirto", 2); break;
             case "keskipeliaika": SelectQuery("select alkuaika, loppuaika from Pelisessio", 3); break;
             //case "rahasiirrot": SelectQuery("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =" + null, 4); break;
-            //case "sessiot": SelectQuery(input, 5); break;
+            case "sessiot": SelectQuery("select sessio_id, alkuaika, loppuaika from Pelisessio", 5); break;
             case "läpäisyprosentti": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
             case "peli": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;
             case "help" : Help(); break;
@@ -38,8 +38,8 @@ public class RawSqlFunctions
             case 1: AnalyticFunctions.AverageBuy(reader); break;
             case 2: AnalyticFunctions.MedianBuy(reader); break;
             case 3: AnalyticFunctions.AveragePlaytime(reader); break;
-            case 4: AnalyticFunctions.CurrentSessions(reader); break;
-            case 5: AnalyticFunctions.DaysTransActions(reader); break;
+            case 4: AnalyticFunctions.DaysTransActions(reader); break;
+            case 5: AnalyticFunctions.CurrentSessions(reader); break;
             case 6: AnalyticFunctions.CompletePercent(reader); break;
             case 7: AnalyticFunctions.GameInfo(reader); break;
             default: DefaultSelect(query, reader); break;
@@ -68,9 +68,21 @@ public class RawSqlFunctions
         Console.WriteLine("Pelin mediaaniostos -> \"mediaaniostos\"");
         Console.WriteLine("Pelin keskipeliaika -> \"keskipeliaika\"");
         // rahasiirrot
-        // sessiot
+        Console.WriteLine("Käynnissä olevat pelisessiot -> sessiot");
         Console.WriteLine("Pelin läpäilyprosentti -> \"läpäisyprosentti\"");
         Console.WriteLine("Tietoja tietystä pelistä -> \"peli\"");
+
+
+        // mahdollinen muutos ? 
+
+        Console.WriteLine("Mahdolliset kyselyt");
+        Console.WriteLine("(1) Pelin keskiostos -> \"keskiostos\"");
+        Console.WriteLine("(2) Pelin mediaaniostos -> \"mediaaniostos\"");
+        Console.WriteLine("(3) Pelin keskipeliaika -> \"keskipeliaika\"");
+        // rahasiirrot
+        Console.WriteLine("(4) Käynnissä olevat pelisessiot -> sessiot");
+        Console.WriteLine("(5) Pelin läpäilyprosentti -> \"läpäisyprosentti\"");
+        Console.WriteLine("(6) Tietoja tietystä pelistä -> \"peli\"");
     }
 
 }

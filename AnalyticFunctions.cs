@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 
 public class AnalyticFunctions
 {
+    
     public static void AverageBuy(MySqlDataReader reader)
     {
         double sum = 0, a = 0;
@@ -54,6 +55,7 @@ public class AnalyticFunctions
                 else
                     if(!reader.IsDBNull(i))
                         ends.Add(reader.GetDateTime(i));
+
                 n++;
             }
         
@@ -69,17 +71,44 @@ public class AnalyticFunctions
         Console.WriteLine(alltime / values.Count);
     }
     
-    // NOT PROPERLY WORKING
     public static void CurrentSessions(MySqlDataReader reader)
     {
-        List<int> nums = new List<int>();
+        //List<int> nums = new List<int>();
+        int a = 0, b = 0;
+        bool readthis = false;
         while(reader.Read())
+        {
             for(int i = 0; i < reader.FieldCount; i++)
-                nums.Add(reader.GetInt32(i));
+            {
+                if(a % 3 != 0)
+                {
+                    Console.WriteLine(reader[i]);
+                    if(b % 2 != 0)
+                    {
+                        if(reader.IsDBNull(i))
+                        {
+                            readthis = true;
+                        }
+                    }
+                    else
+                    {
+                        if(readthis)
+                        {
+                            Console.WriteLine("Aloitusaika" + reader[i]);
+                            readthis = false;
+                        }
+                    }
+                    b++;
+                }
+                //Console.WriteLine(reader[i]);
+                a++;
+            }
+        }
+        //        nums.Add(reader.GetInt32(i));
         
         reader.Close();
-        for(int i = 0; i < nums.Count; i++)
-            Console.WriteLine(nums[i]);
+        //for(int i = 0; i < nums.Count; i++)
+        //    Console.WriteLine(nums[i]);
     }
 
     public static void DaysTransActions(MySqlDataReader reader)
