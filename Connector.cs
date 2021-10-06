@@ -6,42 +6,52 @@ public class Connector
     string connectionString = null;
     static MySqlConnection cnn;
     string database;
+    string server;
+    string uid;
+    string password;
 
     // initializing connection in constuctor
-    public Connector(string server, string _database, string uid, string password)
+    public Connector(string _server, string _database, string _uid, string _password)
     {
+        // getting values from main
+        server = _server;
         database = _database;
-        connectionString = "server=" + server + ";database=" + database + ";uid=" + uid + ";pwd=" + password  + ";SSL Mode=0"; 
+        uid = _uid;
+        password = _password;
+
+        // string used if database already exists
+        connectionString = String.Format("server={0};database={1};uid={2};pwd={3};SSL Mode=0", server, database, uid, password); 
         Connect();
         getDatabases();
     }
 
     void Connect()
     {
+        // check if database exists
         bool dbexist = CheckDatabaseExists(cnn, database);
-
-        if(dbexist)
+        if(!dbexist)
         {
+            // connecting with same values
+            String connStr = String.Format("server={0};user={1};password={2};SSL Mode=0;", server, uid, password);
+            cnn = new MySqlConnection(connStr);
+            var cmd = cnn.CreateCommand();
+            
+            // creating new database
+            cnn.Open();
+            cmd.CommandText = String.Format("CREATE DATABASE IF NOT EXISTS {0};", database);
+            cmd.ExecuteNonQuery();
 
-            // this project has been abandoned
+            // use the new database
+            var select = cnn.CreateCommand();
+            select.CommandText = String.Format("USE {0}", database);
+            select.ExecuteNonQuery();
 
-            MySqlConnection newcon = new MySqlConnection("Server=localhost;Integrated security=SSPI;database=master");
-            String str = "CREATE DATABASE " + database  + ";";
-            MySqlCommand cmd = new MySqlCommand(str, newcon);
-            try
-            {
-                newcon.Open();
-                cmd.ExecuteNonQuery();
-            }
-
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            // here create a instance for new database
         }
         
         else
         {
+            // already existing database
             cnn = new MySqlConnection(connectionString);
             cnn.Open();
         }     
@@ -60,7 +70,7 @@ public class Connector
 
         try
         {
-            query = string.Format("SELECT database_id FROM sys.databases WHERE Name = '{0}'", database);
+            query = string.Format("SELECT database_id FROM sys.databases WHERE Name = {0}", database);
             using (MySqlCommand cmd = new MySqlCommand(query, cnn))
             {
                 cnn.Open();

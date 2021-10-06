@@ -7,12 +7,12 @@ namespace TietokantaTesti
         static void Main(string[] args)
         {
             string server = "", database = "", uid = "", password = "";
-            Console.WriteLine("Use credentials?(y/n)");
+            Console.WriteLine("Login manually?(y/n)");
             string ans = Console.ReadLine();
             if(ans == "n")
             {
                 server = "localhost";
-                database = "Pelianalytiikka";
+                database = "testi";
                 uid = "valtteri"; // change me
                 password = "password"; // and me
             }

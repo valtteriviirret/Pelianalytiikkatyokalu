@@ -80,6 +80,7 @@ public class AnalyticFunctions
         reader.Close();
     }
 
+    // this still needs work, maybe pair with the plottool
     public static void DaysTransActions(MySqlDataReader reader)
     {
         DateTime selected;
@@ -198,9 +199,8 @@ public class AnalyticFunctions
             }
         }
         reader.Close();
-        int sessioM = b / 2;
 
         Console.WriteLine("Pelistudio: " + pelistudio);
-        Console.WriteLine("Sessioita yhteensä: " + sessioM);
+        Console.WriteLine("Sessioita yhteensä: " + (b / 2));
     }
 }
