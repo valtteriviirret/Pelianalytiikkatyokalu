@@ -34,19 +34,25 @@ public class Connector
             // connecting with same values
             String connStr = String.Format("server={0};user={1};password={2};SSL Mode=0;", server, uid, password);
             cnn = new MySqlConnection(connStr);
-            var cmd = cnn.CreateCommand();
             
-            // creating new database
+            // drop if exists
             cnn.Open();
-            cmd.CommandText = String.Format("CREATE DATABASE IF NOT EXISTS {0};", database);
-            cmd.ExecuteNonQuery();
+            String drop = String.Format("DROP DATABASE IF EXISTS {0};", database);
+            MySqlCommand a = new MySqlCommand(drop, cnn);
+            a.ExecuteNonQuery();
 
-            // use the new database
-            var select = cnn.CreateCommand();
-            select.CommandText = String.Format("USE {0}", database);
-            select.ExecuteNonQuery();
+            // create new
+            String create = String.Format("CREATE DATABASE {0};", database);
+            MySqlCommand b = new MySqlCommand(create, cnn);
+            b.ExecuteNonQuery();
+
+            // use new
+            String use = String.Format("USE {0}", database);
+            MySqlCommand c = new MySqlCommand(use, cnn);
+            c.ExecuteNonQuery();
 
             // here create a instance for new database
+            DatabaseCreator creator = new DatabaseCreator();
         }
         
         else
