@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using OxyPlot;
+using OxyPlot.SkiaSharp;
 using OxyPlot.Series;
 using OxyPlot.Axes;
 
@@ -8,6 +10,8 @@ using OxyPlot.Axes;
 /* Dotnet CLI commands for OxyPlot libraries. 
 
 dotnet add package OxyPlot.Core --version 2.1.0
+dotnet add package OxyPlot.SkiaSharp --version 2.1.0
+dotnet add package System.IO.FileSystem.AccessControl --version 5.0.0
 
 */
 
@@ -29,14 +33,6 @@ public class PlotTool
     {
         plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White };
 
-        var datesDouble = new List<double>();
-
-        for (int i = 1; i <= 10; i++)
-        {
-            datesDouble.Add(DateTimeAxis.ToDouble(DateTime.Now.AddDays(i)));
-        }
-
-
         var xAxis = new DateTimeAxis
         {
             Position = AxisPosition.Bottom,
@@ -48,33 +44,31 @@ public class PlotTool
             MinorGridlineStyle = LineStyle.None,
         };
 
-        FunctionSeries fs = new FunctionSeries();
+
+        var functionSeries = new FunctionSeries();
+        var datesDouble = new List<double>();
 
 
-        for (int i = 0; i < datesDouble.Count; i++)
+        for (int i = 0; i < this.Dates.Count; i++)
         {
-            fs.Points.Add(new DataPoint(datesDouble[i], this.Data[i]));
+            datesDouble.Add(DateTimeAxis.ToDouble(this.Dates[i]));
+            functionSeries.Points.Add(new DataPoint(datesDouble[i], this.Data[i]));
         }
 
 
-        plotModel.Series.Add(fs);
+        plotModel.Series.Add(functionSeries);
         plotModel.Axes.Add(xAxis);
         plotModel.Axes.Add(new LinearAxis());
     }
 
-    // If the plot is created, export as an PNG file.
-/*     public void ExportPlot(string fileName, int width = 600, int height = 400)
+    public void ExportPng(string fileName, int width = 600, int height = 400)
     {
+        string path = Directory.GetCurrentDirectory();
+
         if (plotModel != null)
-        {
-            if (!fileName.Contains(".png"))
-                fileName += ".png";
-
-            var pngExport = new PngExporter { Width = width, Height = height };
-            pngExport.ExportToFile(plotModel, fileName);
-        }
-    } */
-
+            using (FileStream fs = File.Create(path))
+                PngExporter.Export(plotModel, path, width, height);
+    }
 
     public string Title { get; set; }
 
