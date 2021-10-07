@@ -28,9 +28,12 @@ public class Connector
     void Connect()
     {
         // check if database exists
-        bool dbexist = CheckDatabaseExists(cnn, database);
+        bool dbexist = CheckIfExists(connectionString, database);
+        
         if(dbexist)
         {
+            Console.WriteLine("Creating new database");
+
             // connecting with same values
             String connStr = String.Format("server={0};user={1};password={2};SSL Mode=0;", server, uid, password);
             cnn = new MySqlConnection(connStr);
@@ -69,33 +72,24 @@ public class Connector
     } 
 
     // check if database exists
-    public static bool CheckDatabaseExists(MySqlConnection cnn, string database)
+    static bool CheckIfExists(string connectionString, string database)
     {
-        string query;
-        bool result = false;
-
-        try
+        using(var cnn = new MySqlConnection(connectionString))
         {
-            query = string.Format("SELECT database_id FROM sys.databases WHERE Name = {0}", database);
-            using (MySqlCommand cmd = new MySqlCommand(query, cnn))
+            using(var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
             {
-                cnn.Open();
-                object resultObj = cmd.ExecuteScalar();
-                int databaseID = 0;
-                if (resultObj != null)
+                try
                 {
-                    int.TryParse(resultObj.ToString(), out databaseID);
+                    cnn.Open();
+                    return true;
                 }
-                cnn.Close();
-                result = (databaseID > 0);
+                catch
+                {
+                    return false;
+                }
             }
         }
-        catch (Exception)
-        {
-            result = false;
-        }
-        return result;
-    }
+    } 
     
     // getter for connection
     public static MySqlConnection GetConnection() => cnn; 

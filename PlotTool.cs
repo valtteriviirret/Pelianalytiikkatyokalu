@@ -7,7 +7,6 @@ using OxyPlot.Axes;
 
 /* Dotnet CLI commands for OxyPlot libraries. 
 
-dotnet add package OxyPlot.WindowsForms --version 2.1.0
 dotnet add package OxyPlot.Core --version 2.1.0
 
 */
