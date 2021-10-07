@@ -40,6 +40,7 @@ public class Connector
             
             // drop if exists
             cnn.Open();
+            Encoding();
             String drop = String.Format("DROP DATABASE IF EXISTS {0};", database);
             MySqlCommand a = new MySqlCommand(drop, cnn);
             a.ExecuteNonQuery();
@@ -62,14 +63,8 @@ public class Connector
             // already existing database
             cnn = new MySqlConnection(connectionString);
             cnn.Open();
+            Encoding();
         }
-    
-        Console.WriteLine("testistkhgsjk");
-
-        // changed encoding
-        MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
-        int n = setcmd.ExecuteNonQuery();
-        setcmd.Dispose();
     } 
 
     // check if database exists
@@ -107,5 +102,11 @@ public class Connector
         
         Console.WriteLine("");
         reader.Close();
+    }
+
+    void Encoding() {
+        MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
+        int n = setcmd.ExecuteNonQuery();
+        setcmd.Dispose();
     }
 }
