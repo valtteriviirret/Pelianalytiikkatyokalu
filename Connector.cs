@@ -29,7 +29,7 @@ public class Connector
     {
         // check if database exists
         bool dbexist = CheckDatabaseExists(cnn, database);
-        if(!dbexist)
+        if(dbexist)
         {
             // connecting with same values
             String connStr = String.Format("server={0};user={1};password={2};SSL Mode=0;", server, uid, password);

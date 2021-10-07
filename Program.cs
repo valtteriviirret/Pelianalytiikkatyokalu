@@ -13,7 +13,7 @@ namespace TietokantaTesti
             {
                 server = "localhost";
                 database = "testi";
-                uid = "valtteri"; // change me
+                uid = "jere"; // change me
                 password = "password"; // and me
             }
             else if(ans == "y")
