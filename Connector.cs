@@ -30,7 +30,7 @@ public class Connector
         // check if database exists
         bool dbexist = CheckIfExists(connectionString, database);
         
-        if(dbexist)
+        if(!dbexist)
         {
             Console.WriteLine("Creating new database");
 
@@ -77,7 +77,7 @@ public class Connector
     {
         using(var connection = new MySqlConnection(connectionString))
         {
-            using(var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
+            using(var cmd = new MySqlCommand($"SELECT db_id('{database}')", connection))
             {
                 try
                 {

@@ -12,7 +12,7 @@ namespace TietokantaTesti
             if(ans == "n")
             {
                 server = "localhost";
-                database = "Pelianalytiikka";
+                database = "Pelianadlytiikka";
                 uid = "jere"; // change me
                 password = "password"; // and me
             }
