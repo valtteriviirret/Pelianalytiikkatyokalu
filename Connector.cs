@@ -57,14 +57,15 @@ public class Connector
             // here create a instance for new database
             DatabaseCreator creator = new DatabaseCreator();
         }
-        
         else
         {
             // already existing database
             cnn = new MySqlConnection(connectionString);
             cnn.Open();
-        }     
+        }
     
+        Console.WriteLine("testistkhgsjk");
+
         // changed encoding
         MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
         int n = setcmd.ExecuteNonQuery();
@@ -74,13 +75,13 @@ public class Connector
     // check if database exists
     static bool CheckIfExists(string connectionString, string database)
     {
-        using(var cnn = new MySqlConnection(connectionString))
+        using(var connection = new MySqlConnection(connectionString))
         {
             using(var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
             {
                 try
                 {
-                    cnn.Open();
+                    connection.Open();
                     return true;
                 }
                 catch
