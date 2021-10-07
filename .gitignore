@@ -1,4 +1,5 @@
 .vscode
+databasetest.csproj
 .vs
 bin
 net5.0
