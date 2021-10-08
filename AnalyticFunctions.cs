@@ -80,23 +80,21 @@ public class AnalyticFunctions
         reader.Close();
     }
 
-    // this still needs work, maybe pair with the plottool
+    // money transactions with spesific day
     public static void DaysTransActions(MySqlDataReader reader)
     {
-        DateTime selected;
         string input;
-        Console.WriteLine("Type the day(DD/MM/YYYY)");
+        Console.WriteLine("Syötä päivä (PP.KK.VVVV)");
         input = Console.ReadLine();
-        selected = Convert.ToDateTime(input);
-        //MySqlDataReader reader = Helper("select summa from Rahasiirto where aikaleima =" + selected);
+        String[] list = input.Split(".");
+        String USinput = list[1] + "/" + list[0] + "/" + list[2];
+
         while(reader.Read())
-        {
             for(int i = 0; i < reader.FieldCount; i++)
-            {
-                Console.WriteLine(reader[i]);
-            }
-        }
+                if(USinput + " 12:00:00 AM" == reader[i].ToString())
+                    Console.WriteLine(reader[i - 1] + "€");
         reader.Close();
+        
     }
 
     public static void CompletePercent(MySqlDataReader reader)
