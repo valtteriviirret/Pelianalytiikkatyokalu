@@ -22,7 +22,7 @@ public class Connector
         // string used if database already exists
         connectionString = String.Format("server={0};database={1};uid={2};pwd={3};SSL Mode=0", server, database, uid, password); 
         Connect();
-        getDatabases();
+        GetDatabases();
     }
 
     void Connect()
@@ -71,7 +71,6 @@ public class Connector
     static bool CheckIfExists(string connectionString, string database)
     {
         using(var connection = new MySqlConnection(connectionString))
-        {
             using(var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
             {
                 try
@@ -84,14 +83,13 @@ public class Connector
                     return false;
                 }
             }
-        }
     } 
     
     // getter for connection
     public static MySqlConnection GetConnection() => cnn; 
     
     // get table names in selected database
-    void getDatabases()
+    void GetDatabases()
     {
         MySqlCommand cmd = new MySqlCommand("show tables", cnn);
         MySqlDataReader reader = cmd.ExecuteReader();
@@ -104,9 +102,10 @@ public class Connector
         reader.Close();
     }
 
-    void Encoding() {
+    void Encoding()
+    {
         MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
-        int n = setcmd.ExecuteNonQuery();
+        setcmd.ExecuteNonQuery();
         setcmd.Dispose();
     }
 }
