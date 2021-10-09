@@ -1,11 +1,9 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
 using OxyPlot;
 using OxyPlot.ImageSharp;
 using OxyPlot.Series;
 using OxyPlot.Axes;
-using Mono.Unix;
 
 /* Dotnet CLI commands for OxyPlot libraries. 
 
@@ -38,7 +36,7 @@ public class PlotTool
         {
             Position = AxisPosition.Bottom,
             StringFormat = "dd/MM/yyyy",
-            Title = "Year",
+            Title = "Date",
             MinorIntervalType = DateTimeIntervalType.Days,
             IntervalType = DateTimeIntervalType.Days,
             MajorGridlineStyle = LineStyle.Solid,
