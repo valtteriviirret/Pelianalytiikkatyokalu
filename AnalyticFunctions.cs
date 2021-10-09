@@ -80,22 +80,19 @@ public class AnalyticFunctions
         reader.Close();
     }
 
-    // this still needs work, maybe pair with the plottool
+    // money transactions with spesific day
     public static void DaysTransActions(MySqlDataReader reader)
     {
-        DateTime selected;
         string input;
-        Console.WriteLine("Type the day(DD/MM/YYYY)");
+        Console.WriteLine("Syötä päivä (PP.KK.VVVV)");
         input = Console.ReadLine();
-        selected = Convert.ToDateTime(input);
-        //MySqlDataReader reader = Helper("select summa from Rahasiirto where aikaleima =" + selected);
+        String[] list = input.Split(".");
+        String USinput = list[1] + "/" + list[0] + "/" + list[2];
+
         while(reader.Read())
-        {
             for(int i = 0; i < reader.FieldCount; i++)
-            {
-                Console.WriteLine(reader[i]);
-            }
-        }
+                if(USinput + " 12:00:00 AM" == reader[i].ToString())
+                    Console.WriteLine(reader[i - 1] + "€");
         reader.Close();
     }
 
@@ -168,39 +165,36 @@ public class AnalyticFunctions
         MySqlDataReader reader = cmd.ExecuteReader();
         
         string pelistudio = "";
-        Console.WriteLine("Pelisessiot pelille: \n");
-        int r = 0, n = 0, a = 0, b = 0;
+        Console.WriteLine("Pelisessiot pelille: ");
+        
+        int counter = 0;
         while(reader.Read())
         {
             pelistudio = reader.GetString(0);
+
             for(int i = 0; i < reader.FieldCount; i++)
             {
-                if(n % 5 != 0)
+                if(i % 5 != 0)
                 {
-                    if(r % 4 != 0)
-                    {
-                        if(a % 3 != 0)
-                        {
-                            if(b % 2 != 0)
-                                Console.WriteLine("Sukunimi: " + reader[i] + "\n");
-                            else
-                                Console.WriteLine("Etunimi: " + reader[i]);
-                            b++;
-                        }
-                        else
-                            Console.WriteLine("Pelaajan id: " + reader[i]);
-                        a++;
-                    }
+                    if((i - 1) % 4 == 0)
+                        Console.Write("Session id: ");
+                    else if((i - 2) % 4 == 0)
+                        Console.Write("Pelaajan id: ");
+                    else if((i - 3) % 4 == 0)
+                        Console.Write("Etunimi: ");
                     else
-                        Console.WriteLine("Session id: " + reader[i]);
-                    r++;
+                        Console.Write("Sukunimi: ");
+                    Console.WriteLine(reader[i]);
+                    counter++;
                 }
-                n++;
+                else
+                    Console.WriteLine("");
             }
         }
         reader.Close();
 
+        Console.WriteLine("");
         Console.WriteLine("Pelistudio: " + pelistudio);
-        Console.WriteLine("Sessioita yhteensä: " + (b / 2));
+        Console.WriteLine("Sessioita yhteensä: " + counter / 4);
     }
 }

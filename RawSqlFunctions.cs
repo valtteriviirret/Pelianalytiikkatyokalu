@@ -19,7 +19,7 @@ public class RawSqlFunctions
             case "keskiostos": SelectQuery("select summa from Rahasiirto", 1); break;
             case "mediaaniostos": SelectQuery("select summa from Rahasiirto", 2); break;
             case "keskipeliaika": SelectQuery("select alkuaika, loppuaika from Pelisessio", 3); break;
-            //case "rahasiirrot": SelectQuery("select peli_id, pelisessio_pelaaja_id from Pelisessio where loppuaika =" + null, 4); break;
+            case "rahasiirrot": SelectQuery("select summa, date(aikaleima), sessio from Rahasiirto;", 4); break;
             case "sessiot": SelectQuery("select sessio_id, alkuaika, loppuaika from Pelisessio", 5); break;
             case "läpäisyprosentti": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
             case "peli": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;

@@ -20,24 +20,24 @@ public class Connector
         password = _password;
 
         // string used if database already exists
-        connectionString = String.Format("server={0};database={1};uid={2};pwd={3};SSL Mode=0", server, database, uid, password); 
+        connectionString = String.Format("server={0};database={1};uid={2};pwd={3};SSL Mode=0", server, database, uid, password);
         Connect();
-        getDatabases();
+        GetDatabases();
     }
 
     void Connect()
     {
         // check if database exists
         bool dbexist = CheckIfExists(connectionString, database);
-        
-        if(!dbexist)
+
+        if (!dbexist)
         {
             Console.WriteLine("Creating new database");
 
             // connecting with same values
             String connStr = String.Format("server={0};user={1};password={2};SSL Mode=0;", server, uid, password);
             cnn = new MySqlConnection(connStr);
-            
+
             // drop if exists
             cnn.Open();
             Encoding();
@@ -65,48 +65,47 @@ public class Connector
             cnn.Open();
             Encoding();
         }
-    } 
+    }
 
     // check if database exists
     static bool CheckIfExists(string connectionString, string database)
     {
-        using(var connection = new MySqlConnection(connectionString))
+        using (var connection = new MySqlConnection(connectionString))
+        using (var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
         {
-            using(var cmd = new MySqlCommand($"SELECT db_id('{database}')", connection))
+            try
             {
-                try
-                {
-                    connection.Open();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
+                connection.Open();
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
-    } 
-    
+    }
+
     // getter for connection
-    public static MySqlConnection GetConnection() => cnn; 
-    
+    public static MySqlConnection GetConnection() => cnn;
+
     // get table names in selected database
-    void getDatabases()
+    void GetDatabases()
     {
         MySqlCommand cmd = new MySqlCommand("show tables", cnn);
         MySqlDataReader reader = cmd.ExecuteReader();
 
-        while(reader.Read())
-            for(int i = 0; i < reader.FieldCount; i++)
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
                 Console.WriteLine(reader[i]);
-        
+
         Console.WriteLine("");
         reader.Close();
     }
 
-    void Encoding() {
+    void Encoding()
+    {
         MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);
-        int n = setcmd.ExecuteNonQuery();
+        setcmd.ExecuteNonQuery();
         setcmd.Dispose();
     }
 }

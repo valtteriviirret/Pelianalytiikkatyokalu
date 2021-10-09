@@ -2,16 +2,17 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using OxyPlot;
-using OxyPlot.SkiaSharp;
+using OxyPlot.ImageSharp;
 using OxyPlot.Series;
 using OxyPlot.Axes;
-
+using Mono.Unix;
 
 /* Dotnet CLI commands for OxyPlot libraries. 
 
 dotnet add package OxyPlot.Core --version 2.1.0
 dotnet add package OxyPlot.SkiaSharp --version 2.1.0
-dotnet add package System.IO.FileSystem.AccessControl --version 5.0.0
+
+dotnet add package Mono.Posix --version 7.1.0-final.1.21458.1
 
 */
 
@@ -63,12 +64,13 @@ public class PlotTool
 
     public void ExportPng(string fileName, int width = 600, int height = 400)
     {
-        string path = Directory.GetCurrentDirectory();
+        if (!fileName.Contains(".png"))
+            fileName += ".png";
 
         if (plotModel != null)
-            using (FileStream fs = File.Create(path))
-                PngExporter.Export(plotModel, path, width, height);
+            PngExporter.Export(plotModel, fileName, width, height);
     }
+
 
     public string Title { get; set; }
 
