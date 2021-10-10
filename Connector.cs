@@ -71,18 +71,18 @@ public class Connector
     static bool CheckIfExists(string connectionString, string database)
     {
         using (var connection = new MySqlConnection(connectionString))
-        using (var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
-        {
-            try
+            using (var cmd = new MySqlCommand($"SELECT db_id('{database}')", cnn))
             {
-                connection.Open();
-                return true;
+                try
+                {
+                    connection.Open();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
-            catch
-            {
-                return false;
-            }
-        }
     }
 
     // getter for connection

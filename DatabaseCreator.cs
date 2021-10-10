@@ -8,7 +8,10 @@ public class DatabaseCreator
     public DatabaseCreator()
     {
         CreateaTables();
-        InsertValues();
+        Console.WriteLine("Luodaanko esimerkkidataa? (y/n)");
+        string ans = Console.ReadLine();
+        if(ans == "y")
+            InsertValues();
     }
 
     // creating all tables

@@ -25,7 +25,13 @@ public class RawSqlFunctions
             case "5": SelectQuery("select sessio_id, alkuaika, loppuaika from Pelisessio", 5); break;
             case "6": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
             case "7": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;
-            case "8": SelectQuery("select date(aikaleima), summa from Rahasiirto where week (aikaleima) = week(current_date) -1 AND YEAR(aikaleima) = YEAR (current_date);", 8); break;
+            case "8": SelectQuery(@"select date(aikaleima), summa from Rahasiirto where week (aikaleima) = week(current_date)
+                                -1 AND YEAR(aikaleima) = YEAR (current_date);", 8);
+                                break;
+            case "9": SelectQuery(@"SELECT etunimi, sukunimi, SUM(summa) as 'yhteensä' FROM Pelaaja,
+                                Rahasiirto, Pelisessio WHERE pelisessio_pelaaja_id = pelaaja_id AND sessio = sessio_id
+                                GROUP BY etunimi ORDER BY SUM(summa) DESC LIMIT 1;", 9);
+                                break;
             case "help": Help(); break;
             default: break;
         }
@@ -46,6 +52,7 @@ public class RawSqlFunctions
             case 6: AnalyticFunctions.CompletePercent(reader); break;
             case 7: AnalyticFunctions.GameInfo(reader); break;
             case 8: AnalyticFunctions.TransactionsCount(reader); break;
+            case 9: AnalyticFunctions.BiggestSpender(reader); break;
             default: DefaultSelect(query, reader); break;
         }
     }
@@ -70,30 +77,17 @@ public class RawSqlFunctions
     // show all commands
     void Help()
     {
-
-        /* english
-        Console.WriteLine("Functions");
-        Console.WriteLine("(1) Average spending");
-        Console.WriteLine("(2) Median spending");
-        Console.WriteLine("(3) Average playtime");
-        Console.WriteLine("(4) Game transactions");
-        Console.WriteLine("(5) Current game sesssions");
-        Console.WriteLine("(6) Game completion percentage");
-        Console.WriteLine("(7) About a specific game "); 
-        */
-
-        // finnish
-        Console.WriteLine("Mahdolliset kyselyt");
-        Console.WriteLine("(1) Pelin keskiostos");
-        Console.WriteLine("(2) Pelin mediaaniostos");
-        Console.WriteLine("(3) Pelin keskipeliaika");
-        Console.WriteLine("(4) Rahasiirrot");
-        Console.WriteLine("(5) Käynnissä olevat pelisessiot");
-        Console.WriteLine("(6) Pelin läpäilyprosentti");
-        Console.WriteLine("(7) Tietoja tietystä pelistä");
-
-        Console.WriteLine("8");
-        Console.WriteLine("\n(0) Tietokannat");
+        Console.Write("Mahdolliset kyselyt\n" +
+        "(1) Pelin keskiostos\n" + 
+        "(2) Pelin mediaaniostos\n" +
+        "(3) Pelin keskipeliaika\n" +
+        "(4) Rahasiirrot\n" +
+        "(5) Käynnissä olevat pelisessiot\n" +
+        "(6) Pelin läpäilyprosentti\n" +
+        "(7) Tietoja tietystä pelistä\n" +
+        "(8) Viikon sisällä tehdyt ostot\n" +
+        "(9) Eniten rahaa käyttänyt pelaaja\n");
+    
     }
 
 }

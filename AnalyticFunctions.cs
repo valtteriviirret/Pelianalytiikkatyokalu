@@ -146,7 +146,8 @@ public class AnalyticFunctions
         Console.WriteLine("Valitse peli id:n perusteella");
         string id = Console.ReadLine();
         string query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
-                        FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id ={0}
+                        FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id 
+                        AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id = {0}
                         AND Pelaaja.pelaaja_id = Pelisessio.pelisessio_pelaaja_id;", id);
 
         MySqlCommand cmd = new MySqlCommand(query, cnn);
@@ -184,5 +185,14 @@ public class AnalyticFunctions
         Console.WriteLine("");
         Console.WriteLine("Pelistudio: " + pelistudio);
         Console.WriteLine("Sessioita yhteensä: " + counter / 4);
+    }
+
+    public static void BiggestSpender(MySqlDataReader reader)
+    {
+        Console.WriteLine("Eniten rahaa käyttänyt pelaaja on: ");
+        while(reader.Read())
+            for(int i = 0; i < reader.FieldCount; i++)
+                Console.Write((i != 2) ? reader[i] + " " : "summalla: " + reader[i] + "€\n");
+        reader.Close();
     }
 }
