@@ -18,6 +18,7 @@ public class RawSqlFunctions
             case "delete": NonQuery(input); break;
             case "insert": NonQuery(input); break;
 
+            case "0": SelectQuery("show tables", 0); break;
             case "1": SelectQuery("select summa from Rahasiirto", 1); break;
             case "2": SelectQuery("select summa from Rahasiirto", 2); break;
             case "3": SelectQuery("select alkuaika, loppuaika from Pelisessio", 3); break;
@@ -30,6 +31,10 @@ public class RawSqlFunctions
                                 Rahasiirto, Pelisessio WHERE pelisessio_pelaaja_id = pelaaja_id AND sessio = sessio_id
                                 GROUP BY etunimi ORDER BY SUM(summa) DESC LIMIT 1;", 9);
                                 break;
+            case "10": SelectQuery(@"SELECT Peli.peli_nimi, COUNT(*) as 'sessioita' FROM Peli,
+                                    Pelisessio WHERE Pelisessio.peli_id = Peli.peli_id GROUP BY Peli.peli_nimi 
+                                    ORDER BY 'sessioita' DESC;", 10);
+                                    break;
             case "help": Help(); break;
             default: break;
         }
@@ -42,6 +47,7 @@ public class RawSqlFunctions
 
         switch (id)
         {
+            case 0: AnalyticFunctions.GetDatabases(reader); break;
             case 1: AnalyticFunctions.AverageBuy(reader); break;
             case 2: AnalyticFunctions.MedianBuy(reader); break;
             case 3: AnalyticFunctions.AveragePlaytime(reader); break;
@@ -49,8 +55,9 @@ public class RawSqlFunctions
             case 5: AnalyticFunctions.CurrentSessions(reader); break;
             case 6: AnalyticFunctions.CompletePercent(reader); break;
             case 7: AnalyticFunctions.GameInfo(reader); break;
-            case 8: AnalyticFunctions.TransactionsCount(reader); break;
+            case 8: AnalyticFunctions.WeeklyTransactions(reader); break;
             case 9: AnalyticFunctions.BiggestSpender(reader); break;
+            case 10: AnalyticFunctions.SessionsByGame(reader); break;
             default: DefaultSelect(query, reader); break;
         }
     }
@@ -76,6 +83,7 @@ public class RawSqlFunctions
     void Help()
     {
         Console.Write("Mahdolliset kyselyt\n" +
+        "(0) Tietokannat\n" + 
         "(1) Pelin keskiostos\n" + 
         "(2) Pelin mediaaniostos\n" +
         "(3) Pelin keskipeliaika\n" +
@@ -83,8 +91,10 @@ public class RawSqlFunctions
         "(5) Käynnissä olevat pelisessiot\n" +
         "(6) Pelin läpäilyprosentti\n" +
         "(7) Tietoja tietystä pelistä\n" +
-        "(8) Viikon sisällä tehdyt ostot\n" +
-        "(9) Eniten rahaa käyttänyt pelaaja\n");
+        "(8) Viikon sisällä tehdyt ostot (kaavio)\n" +
+        "(9) Eniten rahaa käyttänyt pelaaja\n" +
+        "(10) Näyttää sessioiden määrät per peli"
+        );
     
     }
 

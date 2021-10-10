@@ -5,6 +5,17 @@ using MySql.Data.MySqlClient;
 public class AnalyticFunctions
 {
 
+    // get table names in selected database
+    public static void GetDatabases(MySqlDataReader reader)
+    {
+        Console.WriteLine("Taulut tietokannassa: ");
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
+                Console.WriteLine(reader[i]);
+
+        reader.Close();
+    }
+
     // get the average spending
     public static void AverageBuy(MySqlDataReader reader)
     {
@@ -18,7 +29,7 @@ public class AnalyticFunctions
             }
         reader.Close();
         a = (sum / fc);
-        Console.WriteLine(Math.Round(a, 4) + "€");
+        Console.WriteLine("Keskiostos: " + Math.Round(a, 2) + "€");
     }
 
     public static void MedianBuy(MySqlDataReader reader)
@@ -36,15 +47,15 @@ public class AnalyticFunctions
         size = nums.Count;
         mid = size / 2;
         median = (size % 2 != 0) ? nums[mid] : (nums[mid] + nums[mid - 1]) / 2;
-        Console.WriteLine(Math.Round(median, 4) + "€");
+        Console.WriteLine("Mediaaniostos: " + Math.Round(median, 2) + "€");
     }
 
     public static void AveragePlaytime(MySqlDataReader reader)
     {
-        List<DateTime> starts = new List<DateTime>();
-        List<DateTime> ends = new List<DateTime>();
-        List<TimeSpan> values = new List<TimeSpan>();
-        TimeSpan alltime = new TimeSpan(0, 0, 0);
+        var starts = new List<DateTime>();
+        var ends = new List<DateTime>();
+        var values = new List<TimeSpan>();
+        var alltime = new TimeSpan(0, 0, 0);
 
         while (reader.Read())
             for (int i = 0; i < reader.FieldCount; i++)
@@ -67,7 +78,22 @@ public class AnalyticFunctions
         for (int i = 0; i < values.Count; i++)
             alltime += values[i];
 
-        Console.WriteLine(alltime / values.Count);
+        Console.WriteLine("Keskipeliaika: " + alltime / values.Count);
+    }
+
+    // money transactions with specific day
+    public static void DaysTransActions(MySqlDataReader reader)
+    {
+        Console.Write("Syötä päivä (PP.KK.VVVV): ");
+        string input = Console.ReadLine();
+        String[] list = input.Split(".");
+        String USinput = list[1] + "/" + list[0] + "/" + list[2];
+
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
+                if (USinput + " 12:00:00 AM" == reader[i].ToString())
+                    Console.WriteLine(reader[i - 1] + "€");
+        reader.Close();
     }
 
     // current sessions online
@@ -80,24 +106,9 @@ public class AnalyticFunctions
         reader.Close();
     }
 
-    // money transactions with specific day
-    public static void DaysTransActions(MySqlDataReader reader)
-    {
-        Console.WriteLine("Syötä päivä (PP.KK.VVVV)");
-        string input = Console.ReadLine();
-        String[] list = input.Split(".");
-        String USinput = list[1] + "/" + list[0] + "/" + list[2];
 
-        while (reader.Read())
-            for (int i = 0; i < reader.FieldCount; i++)
-                if (USinput + " 12:00:00 AM" == reader[i].ToString())
-                    Console.WriteLine(reader[i - 1] + "€");
-        reader.Close();
-    }
-
-
-    // Amount of transactions for last 7 days WIP
-    public static void TransactionsCount(MySqlDataReader reader)
+    // Amount of transactions for last 7 days 
+    public static void WeeklyTransactions(MySqlDataReader reader)
     {
         var dict = new Dictionary<DateTime, float>();
 
@@ -112,15 +123,24 @@ public class AnalyticFunctions
 
         reader.Close();
 
-        var keyList = new List<DateTime>(dict.Keys);
-        var dataList = new List<float>(dict.Values);
+        foreach(var day in dict)
+            Console.WriteLine(day.Key + ": " + day.Value);
 
-        keyList.Reverse();
-        dataList.Reverse();
+        Console.Write("Luodaanko kaavio? (y/n): ");
+        string ans = Console.ReadLine();
 
-        var pt = new PlotTool("7 päivän rahasiirrot", dataList, keyList);
-        pt.DrawPlot();
-        pt.ExportPng("test");
+        if (ans == "y")
+        {
+            var keyList = new List<DateTime>(dict.Keys);
+            var dataList = new List<float>(dict.Values);
+            keyList.Reverse();
+            dataList.Reverse();
+
+            var pt = new PlotTool("7 päivän rahasiirrot", dataList, keyList);
+            pt.DrawPlot();
+            pt.ExportPng("test");
+        }
+
     }
 
     public static void CompletePercent(MySqlDataReader reader)
@@ -135,7 +155,10 @@ public class AnalyticFunctions
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 int temp = reader.GetInt32(i);
-                var x = (temp == 1) ? started++ : ended++;
+                if(temp == 1)
+                    started++;
+                else 
+                    ended++;
             }
         }
         reader.Close();
@@ -161,11 +184,11 @@ public class AnalyticFunctions
     }    
 
     // get all sessions from chosen game
-    static void SpecificGame()
+    public static void SpecificGame()
     {
         MySqlConnection cnn = Connector.GetConnection();
 
-        Console.WriteLine("Valitse peli id:n perusteella");
+        Console.Write("Valitse peli id:n perusteella: ");
         string id = Console.ReadLine();
         string query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
                         FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id 
@@ -209,6 +232,7 @@ public class AnalyticFunctions
         Console.WriteLine("Sessioita yhteensä: " + counter / 4);
     }
 
+    // player that has spent the biggest amount of money
     public static void BiggestSpender(MySqlDataReader reader)
     {
         Console.WriteLine("Eniten rahaa käyttänyt pelaaja on: ");
@@ -217,4 +241,25 @@ public class AnalyticFunctions
                 Console.Write((i != 2) ? reader[i] + " " : "summalla: " + reader[i] + "€\n");
         reader.Close();
     }
+
+
+    // sessions by game
+    public static void SessionsByGame(MySqlDataReader reader)
+    {
+        var dict = new Dictionary<string, int>();
+
+        while(reader.Read())
+            for(int i = 0; i < reader.FieldCount; i++)
+                if(i == 0)
+                    dict[reader[i].ToString()] = reader.GetInt32(i+1);
+        reader.Close(); 
+        
+        int s = 0;
+        foreach(var item in dict)
+            s += item.Value;
+
+        Console.WriteLine(s);
+    }
+
+
 }

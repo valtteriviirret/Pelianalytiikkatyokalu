@@ -18,7 +18,7 @@ namespace TietokantaTesti
                 {
                     case "n":
                         server = "localhost";
-                        database = "testi7";
+                        database = "test";
                         uid = "valtteri"; // change me
                         password = "password";
                         authInfo = true;
@@ -40,16 +40,17 @@ namespace TietokantaTesti
                 }
             }
 
-            Connector connector = new Connector(server, database, uid, password);
+            // connecting to database
+            new Connector(server, database, uid, password);
 
             while (true)
             {
-                Console.Write("Enter command, \"q\" to quit or \"help\": ");
+                Console.Write("\nSyötä komento, \"q\" poistumiseen tai \"help\": ");
                 string input = Console.ReadLine();
                 if (input == "q")
                     break;
 
-                RawSqlFunctions rsqlf = new RawSqlFunctions();
+                var rsqlf = new RawSqlFunctions();
                 rsqlf.AssingQuery(input);
             }
         }

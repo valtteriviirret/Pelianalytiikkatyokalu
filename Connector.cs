@@ -3,26 +3,21 @@ using MySql.Data.MySqlClient;
 
 public class Connector
 {
-    string connectionString = null;
     static MySqlConnection cnn;
-    string database;
-    string server;
-    string uid;
-    string password;
+    string connectionString, database, server, uid, password;
 
     // initializing connection in constuctor
-    public Connector(string _server, string _database, string _uid, string _password)
+    public Connector(string server, string database, string uid, string password)
     {
         // getting values from main
-        server = _server;
-        database = _database;
-        uid = _uid;
-        password = _password;
+        this.server = server;
+        this.database = database;
+        this.uid = uid;
+        this.password = password;
 
         // string used if database already exists
         connectionString = String.Format("server={0};database={1};uid={2};pwd={3};SSL Mode=0", server, database, uid, password);
         Connect();
-        //GetDatabases();
     }
 
     void Connect()
@@ -78,30 +73,12 @@ public class Connector
                     connection.Open();
                     return true;
                 }
-                catch
-                {
-                    return false;
-                }
+                catch { return false; }
             }
     }
 
     // getter for connection
     public static MySqlConnection GetConnection() => cnn;
-
-    // get table names in selected database
-    void GetDatabases()
-    {
-        MySqlCommand cmd = new MySqlCommand("show tables", cnn);
-        MySqlDataReader reader = cmd.ExecuteReader();
-
-        Console.WriteLine("All tables in this database:");
-        while (reader.Read())
-            for (int i = 0; i < reader.FieldCount; i++)
-                Console.WriteLine(reader[i]);
-
-        Console.WriteLine();
-        reader.Close();
-    }
 
     // change encoding to utf8mb4
     void Encoding()

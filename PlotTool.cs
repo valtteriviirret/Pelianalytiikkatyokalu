@@ -64,10 +64,8 @@ public class PlotTool
             fileName += ".png";
 
         if (plotModel != null)
-        {
-            Console.WriteLine("Ddsasdsa");
             PngExporter.Export(plotModel, fileName, width, height);
-        }
+
     }
 
 

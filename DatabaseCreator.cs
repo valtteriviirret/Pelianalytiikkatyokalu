@@ -5,10 +5,11 @@ public class DatabaseCreator
 {
     MySqlConnection cnn = Connector.GetConnection();
 
+    // make the database in constructor
     public DatabaseCreator()
     {
         CreateaTables();
-        Console.WriteLine("Luodaanko esimerkkidataa? (y/n)");
+        Console.Write("Luodaanko esimerkkidataa? (y/n): ");
         string ans = Console.ReadLine();
         if(ans == "y")
             InsertValues();
@@ -91,6 +92,7 @@ public class DatabaseCreator
 
     }
 
+    // inserting values to tables
     void InsertValues()
     {
         String query = @"INSERT INTO Pelistudio(studio_nimi) VALUES
