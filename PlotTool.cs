@@ -8,9 +8,7 @@ using OxyPlot.Axes;
 /* Dotnet CLI commands for OxyPlot libraries. 
 
 dotnet add package OxyPlot.Core --version 2.1.0
-dotnet add package OxyPlot.SkiaSharp --version 2.1.0
-
-dotnet add package Mono.Posix --version 7.1.0-final.1.21458.1
+dotnet add package OxyPlot.ImageSharp --version 2.1.0
 
 */
 
@@ -30,18 +28,18 @@ public class PlotTool
     // Insert instance variables to a new function series.
     public void DrawPlot()
     {
-        plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White };
+        plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White, DefaultFont = "Roboto"};
 
         var xAxis = new DateTimeAxis
         {
             Position = AxisPosition.Bottom,
             StringFormat = "dd/MM/yyyy",
-            Title = "Date",
             MinorIntervalType = DateTimeIntervalType.Days,
             IntervalType = DateTimeIntervalType.Days,
             MajorGridlineStyle = LineStyle.Solid,
             MinorGridlineStyle = LineStyle.None,
         };
+
 
 
         var functionSeries = new FunctionSeries();
@@ -66,7 +64,10 @@ public class PlotTool
             fileName += ".png";
 
         if (plotModel != null)
+        {
+            Console.WriteLine("Ddsasdsa");
             PngExporter.Export(plotModel, fileName, width, height);
+        }
     }
 
 

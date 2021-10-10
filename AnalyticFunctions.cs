@@ -99,6 +99,28 @@ public class AnalyticFunctions
     // Amount of transactions for last 7 days WIP
     public static void TransactionsCount(MySqlDataReader reader)
     {
+        var dict = new Dictionary<DateTime, float>();
+
+        var today = new DateTime(2021, 2, 16);
+        for (int i = 0; i < 7; i++)
+            dict[today.AddDays(-i)] = 0;
+
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
+                if (i == 1 && dict.ContainsKey(reader.GetDateTime(i)))
+                    dict[reader.GetDateTime(i)] += reader.GetFloat(i - 1);
+
+        reader.Close();
+
+        var keyList = new List<DateTime>(dict.Keys);
+        var dataList = new List<float>(dict.Values);
+
+        keyList.Reverse();
+        dataList.Reverse();
+
+        var pt = new PlotTool("7 päivän rahasiirrot", dataList, keyList);
+        pt.DrawPlot();
+        pt.ExportPng("test");
     }
 
     public static void CompletePercent(MySqlDataReader reader)

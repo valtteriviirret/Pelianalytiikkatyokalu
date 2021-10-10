@@ -25,9 +25,7 @@ public class RawSqlFunctions
             case "5": SelectQuery("select sessio_id, alkuaika, loppuaika from Pelisessio", 5); break;
             case "6": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
             case "7": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;
-            case "8": SelectQuery(@"select date(aikaleima), summa from Rahasiirto where week (aikaleima) = week(current_date)
-                                -1 AND YEAR(aikaleima) = YEAR (current_date);", 8);
-                                break;
+            case "8": SelectQuery("select summa, date(aikaleima), sessio from Rahasiirto;", 8); break;
             case "9": SelectQuery(@"SELECT etunimi, sukunimi, SUM(summa) as 'yhteensä' FROM Pelaaja,
                                 Rahasiirto, Pelisessio WHERE pelisessio_pelaaja_id = pelaaja_id AND sessio = sessio_id
                                 GROUP BY etunimi ORDER BY SUM(summa) DESC LIMIT 1;", 9);
