@@ -97,46 +97,8 @@ public class AnalyticFunctions
 
 
     // Amount of transactions for last 7 days WIP
-
     public static void TransactionsCount(MySqlDataReader reader)
     {
-        var amounts = new List<int>();
-        var dates = new List<DateTime>();
-        /* 
-                while (reader.Read())
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        if (i == 0)
-                            amounts.Add(reader.GetFloat(i));
-                        else if (i == 1)
-                            dates.Add(reader.GetDateTime(i));
-                    }
-         */
-
-        var today = new DateTime(2021, 2, 16);
-        for (int i = 0; i < 7; i++)
-            dates.Add(today.AddDays(-i));
-
-        int sum = 0;
-        foreach (var day in dates)
-        {
-            sum = 0;
-            while (reader.Read())
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    if (i == 1 && day.Equals(reader.GetDateTime(i)))
-                    {
-                        sum += 1;
-                    }
-                }
-            amounts.Add(sum);
-            Console.WriteLine(day.ToString() + ":" + sum.ToString());
-        }
-
-
-
-        reader.Close();
-
     }
 
     public static void CompletePercent(MySqlDataReader reader)
@@ -151,27 +113,18 @@ public class AnalyticFunctions
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 int temp = reader.GetInt32(i);
-                if (temp == 1)
-                {
-                    started++;
-                }
-                else
-                {
-                    ended++;
-                }
+                var x = (temp == 1) ? started++ : ended++;
             }
         }
+        reader.Close();
+
         if (started == 0 && ended == 0)
-        {
             percent = 0;
-        }
         else
-        {
             percent = (float)ended / started * 100;
-        }
+        
         Console.WriteLine("Kenttiä aloitettu " + started + ", kenttiä läpäisty " + started);
         Console.WriteLine("Läpäisyprosentti on: " + Math.Round(percent, 1) + "%");
-        reader.Close();
     }
 
     // get all games and their ids
@@ -195,8 +148,6 @@ public class AnalyticFunctions
         string query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
                         FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id ={0}
                         AND Pelaaja.pelaaja_id = Pelisessio.pelisessio_pelaaja_id;", id);
-
-        List<string> list = new List<string>();
 
         MySqlCommand cmd = new MySqlCommand(query, cnn);
         MySqlDataReader reader = cmd.ExecuteReader();

@@ -7,31 +7,31 @@ namespace TietokantaTesti
         static void Main(string[] args)
         {
             string server = "", database = "", uid = "", password = "";
-            Console.WriteLine("Game analytics tool");
+            Console.WriteLine("Pelianalytiikkatyökalu");
 
             bool authInfo = false;
             while (!authInfo)
             {
-                Console.Write("Login manually? (y/n): ");
+                Console.Write("Kirjaudu manuaalisesti (y/n): ");
                 string ans = Console.ReadLine();
                 switch (ans)
                 {
                     case "n":
                         server = "localhost";
-                        database = "Pelianalytiik";
-                        uid = "jere"; // change me
+                        database = "testi7";
+                        uid = "valtteri"; // change me
                         password = "password";
                         authInfo = true;
                         break;
 
                     case "y":
-                        Console.Write("Enter server ip: ");
+                        Console.Write("Syötä serverin ip: ");
                         server = Console.ReadLine();
-                        Console.Write("Enter database name: ");
+                        Console.Write("Syötä tietokannan nimi: ");
                         database = Console.ReadLine();
-                        Console.Write("Enter uid: ");
+                        Console.Write("Syötä käyttäjänimi: ");
                         uid = Console.ReadLine();
-                        Console.Write("Enter password: ");
+                        Console.Write("Syötä salasana: ");
                         password = Console.ReadLine();
                         authInfo = true;
                         break;

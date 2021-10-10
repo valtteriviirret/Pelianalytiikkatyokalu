@@ -5,6 +5,8 @@ using MySql.Data.MySqlClient;
 public class RawSqlFunctions
 {
     MySqlConnection cnn = Connector.GetConnection();
+    
+    // assing the query for proper SQL statement
     public void AssingQuery(string input)
     {
         string[] tokens = input.Split(' ');
@@ -23,7 +25,7 @@ public class RawSqlFunctions
             case "5": SelectQuery("select sessio_id, alkuaika, loppuaika from Pelisessio", 5); break;
             case "6": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
             case "7": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;
-            case "8": SelectQuery("select summa, date(aikaleima), sessio from Rahasiirto;", 8); break;
+            case "8": SelectQuery("select date(aikaleima), summa from Rahasiirto where week (aikaleima) = week(current_date) -1 AND YEAR(aikaleima) = YEAR (current_date);", 8); break;
             case "help": Help(); break;
             default: break;
         }
@@ -48,12 +50,14 @@ public class RawSqlFunctions
         }
     }
 
+    // update, delete and insert querys
     public void NonQuery(string input)
     {
         MySqlCommand cmd = new MySqlCommand(input, cnn);
         cmd.ExecuteNonQuery();
     }
 
+    // select query with SQL syntax
     void DefaultSelect(string query, MySqlDataReader reader)
     {
         List<string> columns = new List<string>();
@@ -63,6 +67,7 @@ public class RawSqlFunctions
         reader.Close();
     }
 
+    // show all commands
     void Help()
     {
 
