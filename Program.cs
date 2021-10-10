@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace TietokantaTesti
 {
@@ -8,50 +7,44 @@ namespace TietokantaTesti
         static void Main(string[] args)
         {
             string server = "", database = "", uid = "", password = "";
-            Console.WriteLine("Login manually?(y/n)");
-            string ans = Console.ReadLine();
-            if (ans == "n")
+            Console.WriteLine("Game analytics tool");
+
+            bool authInfo = false;
+            while (!authInfo)
             {
-                server = "localhost";
-                database = "data";
-                uid = "jere"; // change me
-                password = "password"; // and me
+                Console.Write("Login manually? (y/n): ");
+                string ans = Console.ReadLine();
+                switch (ans)
+                {
+                    case "n":
+                        server = "localhost";
+                        database = "Pelianalytiik";
+                        uid = "jere"; // change me
+                        password = "password";
+                        authInfo = true;
+                        break;
+
+                    case "y":
+                        Console.Write("Enter server ip: ");
+                        server = Console.ReadLine();
+                        Console.Write("Enter database name: ");
+                        database = Console.ReadLine();
+                        Console.Write("Enter uid: ");
+                        uid = Console.ReadLine();
+                        Console.Write("Enter password: ");
+                        password = Console.ReadLine();
+                        authInfo = true;
+                        break;
+                    default:
+                        break;
+                }
             }
-            else if (ans == "y")
-            {
-                // auth
-                Console.WriteLine("Enter server ip:");
-                server = Console.ReadLine();
-                Console.WriteLine("Enter database name:");
-                database = Console.ReadLine();
-                Console.WriteLine("Enter uid:");
-                uid = Console.ReadLine();
-                Console.WriteLine("Enter password:");
-                password = Console.ReadLine();
-            }
-            else
-                Console.WriteLine("Type again");
 
-
-            var date1 = DateTime.Now;
-            var date2 = date1.AddDays(1);
-            var date3 = date1.AddDays(2);
-            var date4 = date1.AddDays(3);
-
-            List<double> data = new List<double> { 4.0, 5.0, 6.0, 7.0 };
-            List<DateTime> dates = new List<DateTime> { date1, date2, date3, date4 };
-
-
-            var plotTool = new PlotTool("hello", data, dates);
-            plotTool.DrawPlot();
-            plotTool.ExportPng("hallo");
-
-            Console.WriteLine("All tables in this database:");
             Connector connector = new Connector(server, database, uid, password);
 
             while (true)
             {
-                Console.WriteLine("Enter command, \"q\" to quit or \"help\" : ");
+                Console.Write("Enter command, \"q\" to quit or \"help\": ");
                 string input = Console.ReadLine();
                 if (input == "q")
                     break;

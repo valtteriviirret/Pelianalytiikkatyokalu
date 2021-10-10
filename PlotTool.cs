@@ -20,7 +20,7 @@ public class PlotTool
     private PlotModel plotModel;
 
     // Initializes a new instance of the PlotTool class.
-    public PlotTool(string title, List<double> data, List<DateTime> dates)
+    public PlotTool(string title, List<float> data, List<DateTime> dates)
     {
         this.Title = title;
         this.Data = data;
@@ -72,7 +72,7 @@ public class PlotTool
 
     public string Title { get; set; }
 
-    public List<double> Data { get; set; }
+    public List<float> Data { get; set; }
 
     public List<DateTime> Dates { get; set; }
 

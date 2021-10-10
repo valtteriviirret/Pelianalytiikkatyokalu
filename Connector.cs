@@ -22,7 +22,7 @@ public class Connector
         // string used if database already exists
         connectionString = String.Format("server={0};database={1};uid={2};pwd={3};SSL Mode=0", server, database, uid, password);
         Connect();
-        GetDatabases();
+        //GetDatabases();
     }
 
     void Connect()
@@ -32,7 +32,7 @@ public class Connector
 
         if (!dbexist)
         {
-            Console.WriteLine("Creating new database");
+            Console.WriteLine("Luodaan uusi tietokanta");
 
             // connecting with same values
             String connStr = String.Format("server={0};user={1};password={2};SSL Mode=0;", server, uid, password);
@@ -94,11 +94,12 @@ public class Connector
         MySqlCommand cmd = new MySqlCommand("show tables", cnn);
         MySqlDataReader reader = cmd.ExecuteReader();
 
+        Console.WriteLine("All tables in this database:");
         while (reader.Read())
             for (int i = 0; i < reader.FieldCount; i++)
                 Console.WriteLine(reader[i]);
 
-        Console.WriteLine("");
+        Console.WriteLine();
         reader.Close();
     }
 
