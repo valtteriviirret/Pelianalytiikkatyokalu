@@ -103,6 +103,7 @@ public class Connector
         reader.Close();
     }
 
+    // change encoding to utf8mb4
     void Encoding()
     {
         MySqlCommand setcmd = new MySqlCommand("SET character_set_results=utf8mb4", cnn);

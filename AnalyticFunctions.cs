@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 public class AnalyticFunctions
 {
 
+    // get the average spending
     public static void AverageBuy(MySqlDataReader reader)
     {
         double sum = 0, a = 0;
@@ -17,7 +18,7 @@ public class AnalyticFunctions
             }
         reader.Close();
         a = (sum / fc);
-        Console.WriteLine(Math.Round(a, 4));
+        Console.WriteLine(Math.Round(a, 4) + "€");
     }
 
     public static void MedianBuy(MySqlDataReader reader)
@@ -35,7 +36,7 @@ public class AnalyticFunctions
         size = nums.Count;
         mid = size / 2;
         median = (size % 2 != 0) ? nums[mid] : (nums[mid] + nums[mid - 1]) / 2;
-        Console.WriteLine(Math.Round(median, 4));
+        Console.WriteLine(Math.Round(median, 4) + "€");
     }
 
     public static void AveragePlaytime(MySqlDataReader reader)
@@ -45,18 +46,16 @@ public class AnalyticFunctions
         List<TimeSpan> values = new List<TimeSpan>();
         TimeSpan alltime = new TimeSpan(0, 0, 0);
 
-        int n = 0;
         while (reader.Read())
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 // add to lists
-                if (n % 2 == 0)
+                if (i % 2 == 0)
                     starts.Add(reader.GetDateTime(i));
                 else
                     if (!reader.IsDBNull(i))
-                    ends.Add(reader.GetDateTime(i));
+                        ends.Add(reader.GetDateTime(i));
 
-                n++;
             }
 
         reader.Close();
@@ -71,6 +70,7 @@ public class AnalyticFunctions
         Console.WriteLine(alltime / values.Count);
     }
 
+    // current sessions online
     public static void CurrentSessions(MySqlDataReader reader)
     {
         while (reader.Read())
@@ -80,12 +80,11 @@ public class AnalyticFunctions
         reader.Close();
     }
 
-    // money transactions with spesific day
+    // money transactions with specific day
     public static void DaysTransActions(MySqlDataReader reader)
     {
-        string input;
         Console.WriteLine("Syötä päivä (PP.KK.VVVV)");
-        input = Console.ReadLine();
+        string input = Console.ReadLine();
         String[] list = input.Split(".");
         String USinput = list[1] + "/" + list[0] + "/" + list[2];
 
@@ -175,38 +174,24 @@ public class AnalyticFunctions
         reader.Close();
     }
 
+    // get all games and their ids
     public static void GameInfo(MySqlDataReader reader)
     {
-        List<int> ids = new List<int>();
-        List<string> names = new List<string>();
-
-        int n = 0;
-        while (reader.Read())
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                // add to lists
-                if (n % 2 == 0)
-                    ids.Add(reader.GetInt32(i));
-                else
-                    names.Add(reader.GetString(i));
-                n++;
-
-            }
+        while(reader.Read())
+            for(int i = 0; i < reader.FieldCount; i++)
+                Console.Write((i % 2 == 0) ? (reader[i] + " : ") : (reader[i] + "\n"));
         reader.Close();
 
-        for (int i = 0; i < ids.Count; i++)
-            Console.WriteLine(ids[i] + " : " + names[i]);
-
         SpecificGame();
-    }
+    }    
 
+    // get all sessions from chosen game
     static void SpecificGame()
     {
         MySqlConnection cnn = Connector.GetConnection();
 
         Console.WriteLine("Valitse peli id:n perusteella");
-        string id;
-        id = Console.ReadLine();
+        string id = Console.ReadLine();
         string query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
                         FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id ={0}
                         AND Pelaaja.pelaaja_id = Pelisessio.pelisessio_pelaaja_id;", id);
