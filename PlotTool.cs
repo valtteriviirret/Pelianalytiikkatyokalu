@@ -29,7 +29,7 @@ public class PlotTool
     }
 
     // returns plot model with linear bar values and axes
-    private PlotModel LineBarSeries()
+    PlotModel LineBarSeries()
     {
 
         var plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White, DefaultFont = "Roboto" };
@@ -57,7 +57,7 @@ public class PlotTool
     }
 
     // returns plot model with pie chart strings and values.
-    private PlotModel PieChartSeries()
+    PlotModel PieChartSeries()
     {
         var plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White, DefaultFont = "Roboto" };
 

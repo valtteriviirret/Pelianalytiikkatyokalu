@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 public class RawSqlFunctions
 {
     MySqlConnection cnn = Connector.GetConnection();
-    
+
     // assing the query for proper SQL statement
     public void AssingQuery(string input)
     {
@@ -27,14 +27,16 @@ public class RawSqlFunctions
             case "6": SelectQuery("select tapahtuma_tyyppi_id from Pelitapahtuma where tapahtuma_tyyppi_id < 3;", 6); break;
             case "7": SelectQuery("select peli_id, peli_nimi from Peli", 7); break;
             case "8": SelectQuery("select summa, date(aikaleima), sessio from Rahasiirto;", 8); break;
-            case "9": SelectQuery(@"SELECT etunimi, sukunimi, SUM(summa) as 'yhteensä' FROM Pelaaja,
+            case "9":
+                SelectQuery(@"SELECT etunimi, sukunimi, SUM(summa) as 'yhteensä' FROM Pelaaja,
                                 Rahasiirto, Pelisessio WHERE pelisessio_pelaaja_id = pelaaja_id AND sessio = sessio_id
                                 GROUP BY etunimi ORDER BY SUM(summa) DESC LIMIT 1;", 9);
-                                break;
-            case "10": SelectQuery(@"SELECT Peli.peli_nimi, COUNT(*) as 'sessioita' FROM Peli,
+                break;
+            case "10":
+                SelectQuery(@"SELECT Peli.peli_nimi, COUNT(*) as 'sessioita' FROM Peli,
                                     Pelisessio WHERE Pelisessio.peli_id = Peli.peli_id GROUP BY Peli.peli_nimi 
                                     ORDER BY 'sessioita' DESC;", 10);
-                                    break;
+                break;
             case "help": Help(); break;
             default: break;
         }
@@ -83,8 +85,8 @@ public class RawSqlFunctions
     void Help()
     {
         Console.Write("Mahdolliset kyselyt\n" +
-        "(0) Tietokannat\n" + 
-        "(1) Pelin keskiostos\n" + 
+        "(0) Tietokannat\n" +
+        "(1) Pelin keskiostos\n" +
         "(2) Pelin mediaaniostos\n" +
         "(3) Pelin keskipeliaika\n" +
         "(4) Rahasiirrot\n" +
@@ -93,9 +95,9 @@ public class RawSqlFunctions
         "(7) Tietoja tietystä pelistä\n" +
         "(8) Viikon sisällä tehdyt ostot (kaavio)\n" +
         "(9) Eniten rahaa käyttänyt pelaaja\n" +
-        "(10) Näyttää sessioiden määrät per peli"
+        "(10) Sessioiden määrät per peli (kaavio)\n"
         );
-    
+
     }
 
 }

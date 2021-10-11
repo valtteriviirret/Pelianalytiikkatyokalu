@@ -253,8 +253,10 @@ public class AnalyticFunctions
                     dict[reader[i].ToString()] = reader.GetFloat(i + 1);
         reader.Close();
 
+        foreach (var item in dict)
+            Console.WriteLine(item.Key + ": " + item.Value);
 
-        Console.Write("Luodaanko kaavio? (y/n): ");
+        Console.Write("\nLuodaanko kaavio? (y/n): ");
         string ans = Console.ReadLine();
 
         if (ans == "y")
