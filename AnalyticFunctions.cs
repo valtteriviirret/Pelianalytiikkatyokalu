@@ -68,7 +68,7 @@ public class AnalyticFunctions
                     starts.Add(reader.GetDateTime(i));
                 else
                     if (!reader.IsDBNull(i))
-                    ends.Add(reader.GetDateTime(i));
+                        ends.Add(reader.GetDateTime(i));
             }
 
         reader.Close();
