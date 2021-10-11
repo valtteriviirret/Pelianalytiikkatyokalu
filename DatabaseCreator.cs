@@ -11,7 +11,7 @@ public class DatabaseCreator
         CreateaTables();
         Console.Write("Luodaanko esimerkkidataa? (y/n): ");
         string ans = Console.ReadLine();
-        if(ans == "y")
+        if (ans == "y")
             InsertValues();
     }
 
