@@ -1,4 +1,5 @@
 # Pelianalytiikkatyökalu
+Game analytics tool school project. All IO is written in Finnish.
 
 # Dependencies
 .NET 5.0  
