@@ -13,6 +13,7 @@ public class RawSqlFunctions
 
         switch (tokens[0].ToLower())
         {
+            // this tool does accept these SQL staments as commands!
             case "select": SelectQuery(input, 0); break;
             case "update": NonQuery(input); break;
             case "delete": NonQuery(input); break;
@@ -42,6 +43,7 @@ public class RawSqlFunctions
         }
     }
 
+    // querys that use select keyword
     public void SelectQuery(string query, int id)
     {
         MySqlCommand cmd = new MySqlCommand(query, cnn);
