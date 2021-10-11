@@ -194,11 +194,18 @@ public class AnalyticFunctions
 
         Console.Write("Valitse peli id:n perusteella: ");
         string id = Console.ReadLine();
-        string query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
-                        FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id 
-                        AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id = {0}
-                        AND Pelaaja.pelaaja_id = Pelisessio.pelisessio_pelaaja_id;", id);
+        // Sql injection check
+        int numericValue;
+        bool isNumber = int.TryParse(id, out numericValue);
+        string query = "";
+        if(isNumber)
+        {
+            query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
+                            FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id 
+                            AND Peli.peli_id = Pelisessio.peli_id AND Peli.peli_id = {0}
+                            AND Pelaaja.pelaaja_id = Pelisessio.pelisessio_pelaaja_id;", id);
 
+        }
         MySqlCommand cmd = new MySqlCommand(query, cnn);
         MySqlDataReader reader = cmd.ExecuteReader();
 
