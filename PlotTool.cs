@@ -47,8 +47,8 @@ public class PlotTool
 
         var lineBarSeries = new LinearBarSeries() { BarWidth = 50 };
 
-        for (int i = 0; i < this.Dates.Count; i++)
-            lineBarSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(this.Dates[i]), this.Data[i]));
+        for (int i = 0; i < this.LineDates.Count; i++)
+            lineBarSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(this.LineDates[i]), this.LineData[i]));
 
         plotModel.Series.Add(lineBarSeries);
         plotModel.Axes.Add(xAxis);
