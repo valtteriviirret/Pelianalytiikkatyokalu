@@ -5,31 +5,30 @@ using OxyPlot.ImageSharp;
 using OxyPlot.Series;
 using OxyPlot.Axes;
 
-/* Dotnet CLI commands for OxyPlot libraries. 
+/* OxyPlot dependencies. 
 dotnet add package OxyPlot.Core --version 2.1.0
 dotnet add package OxyPlot.ImageSharp --version 2.1.0
 */
 
-
 public class PlotTool
 {
-    // Linear bar series constructor.
+    // linear bar series constructor.
     public PlotTool(string title, List<float> lineData, List<DateTime> lineDates)
     {
         this.Title = title;
-        this.LineData = lineData;
+        this.LineValues = lineData;
         this.LineDates = lineDates;
     }
 
-    // Pie chart series constructor.
-    /*     public PlotTool(string title, List<float> lineData, List<DateTime> lineDates)
-        {
-            this.Title = title;
-            this.LineData = lineData;
-            this.LineDates = lineDates;
-        } */
+    // pie chart series constructor.
+    public PlotTool(string title, List<string> pieStrings, List<float> pieValues)
+    {
+        this.Title = title;
+        this.PieStrings = pieStrings;
+        this.PieValues = pieValues;
+    }
 
-    // Insert instance variables to a new function series.
+    // returns plot model with linear bar values and axes
     private PlotModel LineBarSeries()
     {
 
@@ -48,7 +47,7 @@ public class PlotTool
         var lineBarSeries = new LinearBarSeries() { BarWidth = 50 };
 
         for (int i = 0; i < this.LineDates.Count; i++)
-            lineBarSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(this.LineDates[i]), this.LineData[i]));
+            lineBarSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(this.LineDates[i]), this.LineValues[i]));
 
         plotModel.Series.Add(lineBarSeries);
         plotModel.Axes.Add(xAxis);
@@ -57,23 +56,21 @@ public class PlotTool
         return plotModel;
     }
 
+    // returns plot model with pie chart strings and values.
     private PlotModel PieChartSeries()
     {
-        var plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White };
+        var plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White, DefaultFont = "Roboto" };
 
         var ps = new PieSeries
         {
             StrokeThickness = 2.0,
             InsideLabelPosition = 0.8,
             AngleSpan = 360,
-            StartAngle = 0
+            StartAngle = 0,
         };
 
-        ps.Slices.Add(new PieSlice("Africa", 1030) { IsExploded = true });
-        ps.Slices.Add(new PieSlice("Americas", 929) { IsExploded = true });
-        ps.Slices.Add(new PieSlice("Asia", 4157));
-        ps.Slices.Add(new PieSlice("Europe", 739) { IsExploded = true });
-        ps.Slices.Add(new PieSlice("Oceania", 35) { IsExploded = true });
+        for (int i = 0; i < this.PieStrings.Count; i++)
+            ps.Slices.Add(new PieSlice(this.PieStrings[i], this.PieValues[i]) { IsExploded = true });
 
         plotModel.Series.Add(ps);
 
@@ -90,19 +87,21 @@ public class PlotTool
             default: throw new NullReferenceException("Plot style null.");
         }
 
+        //check if parameters contains file extension
         if (!fileName.Contains(".png"))
             fileName += ".png";
 
         if (pm != null)
-            PngExporter.Export(pm, fileName, width, height);
+            PngExporter.Export(pm, fileName, width, height);    //export
     }
 
 
     public string Title { get; set; }
 
-    public List<float> LineData { get; set; }
-
+    public List<float> LineValues { get; set; }
     public List<DateTime> LineDates { get; set; }
 
+    public List<float> PieValues { get; set; }
+    public List<string> PieStrings { get; set; }
 
 }

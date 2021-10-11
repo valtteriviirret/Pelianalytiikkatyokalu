@@ -19,7 +19,7 @@ namespace TietokantaTesti
                     case "n":
                         server = "localhost";
                         database = "test";
-                        uid = "valtteri"; // change me
+                        uid = "jere"; // change me
                         password = "password";
                         authInfo = true;
                         break;
@@ -33,10 +33,10 @@ namespace TietokantaTesti
                         uid = Console.ReadLine();
                         Console.Write("Syötä salasana: ");
                         // hide password
-                        while(true)
+                        while (true)
                         {
                             var key = System.Console.ReadKey(true);
-                            if(key.Key == ConsoleKey.Enter)
+                            if (key.Key == ConsoleKey.Enter)
                                 break;
                             password += key.KeyChar;
                         }

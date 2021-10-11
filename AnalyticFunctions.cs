@@ -65,7 +65,7 @@ public class AnalyticFunctions
                     starts.Add(reader.GetDateTime(i));
                 else
                     if (!reader.IsDBNull(i))
-                        ends.Add(reader.GetDateTime(i));
+                    ends.Add(reader.GetDateTime(i));
 
             }
 
@@ -107,7 +107,7 @@ public class AnalyticFunctions
     }
 
 
-    // Amount of transactions for last 7 days 
+    // amount of transactions for the last 7 days, outputs text and optionally png chart
     public static void WeeklyTransactions(MySqlDataReader reader)
     {
         var dict = new Dictionary<DateTime, float>();
@@ -123,7 +123,7 @@ public class AnalyticFunctions
 
         reader.Close();
 
-        foreach(var day in dict)
+        foreach (var day in dict)
             Console.WriteLine(day.Key + ": " + day.Value);
 
         Console.Write("Luodaanko kaavio? (y/n): ");
@@ -131,14 +131,13 @@ public class AnalyticFunctions
 
         if (ans == "y")
         {
-            var keyList = new List<DateTime>(dict.Keys);
-            var dataList = new List<float>(dict.Values);
-            keyList.Reverse();
-            dataList.Reverse();
+            var dates = new List<DateTime>(dict.Keys);
+            var values = new List<float>(dict.Values);
+            dates.Reverse();
+            values.Reverse();
 
-            var pt = new PlotTool("7 päivän rahasiirrot", dataList, keyList);
-            pt.DrawPlot();
-            pt.ExportPng("test");
+            var pt = new PlotTool("7 päivän rahasiirrot", values, dates);
+            pt.ExportPng("rahasiirrot", 1);
         }
 
     }
@@ -155,9 +154,9 @@ public class AnalyticFunctions
             for (int i = 0; i < reader.FieldCount; i++)
             {
                 int temp = reader.GetInt32(i);
-                if(temp == 1)
+                if (temp == 1)
                     started++;
-                else 
+                else
                     ended++;
             }
         }
@@ -167,7 +166,7 @@ public class AnalyticFunctions
             percent = 0;
         else
             percent = (float)ended / started * 100;
-        
+
         Console.WriteLine("Kenttiä aloitettu " + started + ", kenttiä läpäisty " + started);
         Console.WriteLine("Läpäisyprosentti on: " + Math.Round(percent, 1) + "%");
     }
@@ -175,13 +174,13 @@ public class AnalyticFunctions
     // get all games and their ids
     public static void GameInfo(MySqlDataReader reader)
     {
-        while(reader.Read())
-            for(int i = 0; i < reader.FieldCount; i++)
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
                 Console.Write((i % 2 == 0) ? (reader[i] + " : ") : (reader[i] + "\n"));
         reader.Close();
 
         SpecificGame();
-    }    
+    }
 
     // get all sessions from chosen game
     public static void SpecificGame()
@@ -236,28 +235,36 @@ public class AnalyticFunctions
     public static void BiggestSpender(MySqlDataReader reader)
     {
         Console.WriteLine("Eniten rahaa käyttänyt pelaaja on: ");
-        while(reader.Read())
-            for(int i = 0; i < reader.FieldCount; i++)
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
                 Console.Write((i != 2) ? reader[i] + " " : "summalla: " + reader[i] + "€\n");
         reader.Close();
     }
 
 
-    // sessions by game
+    // sessions by game, outputs text and optionally png chart
     public static void SessionsByGame(MySqlDataReader reader)
     {
-        var dict = new Dictionary<string, int>();
+        var dict = new Dictionary<string, float>();
 
-        while(reader.Read())
-            for(int i = 0; i < reader.FieldCount; i++)
-                if(i == 0)
-                    dict[reader[i].ToString()] = reader.GetInt32(i+1);
-        reader.Close(); 
-        
-        int s = 0;
-        foreach(var item in dict)
-            s += item.Value;
+        while (reader.Read())
+            for (int i = 0; i < reader.FieldCount; i++)
+                if (i == 0)
+                    dict[reader[i].ToString()] = reader.GetFloat(i + 1);
+        reader.Close();
 
+
+        Console.Write("Luodaanko kaavio? (y/n): ");
+        string ans = Console.ReadLine();
+
+        if (ans == "y")
+        {
+            var strings = new List<string>(dict.Keys);
+            var values = new List<float>(dict.Values);
+
+            var pt = new PlotTool("Sessiot", strings, values);
+            pt.ExportPng("Sessiot", 2);
+        }
     }
 
 }
