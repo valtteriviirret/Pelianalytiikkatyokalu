@@ -258,8 +258,6 @@ public class AnalyticFunctions
         foreach(var item in dict)
             s += item.Value;
 
-        Console.WriteLine(s);
     }
-
 
 }

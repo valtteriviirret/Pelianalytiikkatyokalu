@@ -32,7 +32,14 @@ namespace TietokantaTesti
                         Console.Write("Syötä käyttäjänimi: ");
                         uid = Console.ReadLine();
                         Console.Write("Syötä salasana: ");
-                        password = Console.ReadLine();
+                        // hide password
+                        while(true)
+                        {
+                            var key = System.Console.ReadKey(true);
+                            if(key.Key == ConsoleKey.Enter)
+                                break;
+                            password += key.KeyChar;
+                        }
                         authInfo = true;
                         break;
                     default:
