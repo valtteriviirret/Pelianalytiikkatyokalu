@@ -50,8 +50,8 @@ public class Connector
             MySqlCommand c = new MySqlCommand(use, cnn);
             c.ExecuteNonQuery();
 
-            // here create a instance for new database
-            DatabaseCreator creator = new DatabaseCreator();
+            // creating database
+            new DatabaseCreator();
         }
         else
         {
