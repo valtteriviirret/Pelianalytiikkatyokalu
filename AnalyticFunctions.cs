@@ -32,6 +32,7 @@ public class AnalyticFunctions
         Console.WriteLine("Keskiostos: " + Math.Round(a, 2) + "€");
     }
 
+    // get the median value of spending
     public static void MedianBuy(MySqlDataReader reader)
     {
         int size = 0, mid = 0;
@@ -46,10 +47,12 @@ public class AnalyticFunctions
         nums.Sort();
         size = nums.Count;
         mid = size / 2;
+        // get middle element, or average of two middle elements
         median = (size % 2 != 0) ? nums[mid] : (nums[mid] + nums[mid - 1]) / 2;
         Console.WriteLine("Mediaaniostos: " + Math.Round(median, 2) + "€");
     }
 
+    // get the average playtime
     public static void AveragePlaytime(MySqlDataReader reader)
     {
         var starts = new List<DateTime>();
@@ -65,8 +68,7 @@ public class AnalyticFunctions
                     starts.Add(reader.GetDateTime(i));
                 else
                     if (!reader.IsDBNull(i))
-                    ends.Add(reader.GetDateTime(i));
-
+                        ends.Add(reader.GetDateTime(i));
             }
 
         reader.Close();
@@ -75,6 +77,7 @@ public class AnalyticFunctions
         for (int i = 0; i < ends.Count; i++)
             values.Add(ends[i].Subtract(starts[i]));
 
+        // count totaltime
         for (int i = 0; i < values.Count; i++)
             alltime += values[i];
 
@@ -86,11 +89,13 @@ public class AnalyticFunctions
     {
         Console.Write("Syötä päivä (PP.KK.VVVV): ");
         string input = Console.ReadLine();
+        // change Finnish date to US
         String[] list = input.Split(".");
         String USinput = list[1] + "/" + list[0] + "/" + list[2];
 
         while (reader.Read())
             for (int i = 0; i < reader.FieldCount; i++)
+                // compare input day with all days
                 if (USinput + " 12:00:00 AM" == reader[i].ToString())
                     Console.WriteLine(reader[i - 1] + "€");
         reader.Close();
