@@ -1,1 +1,6 @@
 # Pelianalytiikkatyökalu
+
+dotnet add package OxyPlot.Core --version 2.1.0
+dotnet add package OxyPlot.ImageSharp --version 2.1.0
+dotnet add package System.Data.SqlClient
+dotnet add package MySql.Data
