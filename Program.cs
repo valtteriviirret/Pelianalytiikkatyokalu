@@ -17,10 +17,10 @@ namespace TietokantaTesti
                 switch (ans)
                 {
                     case "n":
-                        server = "localhost";
-                        database = "test";
-                        uid = "jere"; // change me
-                        password = "password";
+                        server = "";
+                        database = "";
+                        uid = ""; 
+                        password = "";
                         authInfo = true;
                         break;
 
