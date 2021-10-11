@@ -6,75 +6,103 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 /* Dotnet CLI commands for OxyPlot libraries. 
-
 dotnet add package OxyPlot.Core --version 2.1.0
-dotnet add package OxyPlot.SkiaSharp --version 2.1.0
-
-dotnet add package Mono.Posix --version 7.1.0-final.1.21458.1
-
+dotnet add package OxyPlot.ImageSharp --version 2.1.0
 */
 
 
 public class PlotTool
 {
-    private PlotModel plotModel;
-
-    // Initializes a new instance of the PlotTool class.
-    public PlotTool(string title, List<float> data, List<DateTime> dates)
+    // Linear bar series constructor.
+    public PlotTool(string title, List<float> lineData, List<DateTime> lineDates)
     {
         this.Title = title;
-        this.Data = data;
-        this.Dates = dates;
+        this.LineData = lineData;
+        this.LineDates = lineDates;
     }
 
+    // Pie chart series constructor.
+    /*     public PlotTool(string title, List<float> lineData, List<DateTime> lineDates)
+        {
+            this.Title = title;
+            this.LineData = lineData;
+            this.LineDates = lineDates;
+        } */
+
     // Insert instance variables to a new function series.
-    public void DrawPlot()
+    private PlotModel LineBarSeries()
     {
-        plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White };
+
+        var plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White, DefaultFont = "Roboto" };
 
         var xAxis = new DateTimeAxis
         {
             Position = AxisPosition.Bottom,
-            StringFormat = "dd/MM/yyyy",
-            Title = "Date",
+            StringFormat = "dd.MM.yyyy",
             MinorIntervalType = DateTimeIntervalType.Days,
             IntervalType = DateTimeIntervalType.Days,
             MajorGridlineStyle = LineStyle.Solid,
             MinorGridlineStyle = LineStyle.None,
         };
 
-
-        var functionSeries = new FunctionSeries();
-        var datesDouble = new List<double>();
-
+        var lineBarSeries = new LinearBarSeries() { BarWidth = 50 };
 
         for (int i = 0; i < this.Dates.Count; i++)
-        {
-            datesDouble.Add(DateTimeAxis.ToDouble(this.Dates[i]));
-            functionSeries.Points.Add(new DataPoint(datesDouble[i], this.Data[i]));
-        }
+            lineBarSeries.Points.Add(new DataPoint(DateTimeAxis.ToDouble(this.Dates[i]), this.Data[i]));
 
-
-        plotModel.Series.Add(functionSeries);
+        plotModel.Series.Add(lineBarSeries);
         plotModel.Axes.Add(xAxis);
         plotModel.Axes.Add(new LinearAxis());
+
+        return plotModel;
     }
 
-    public void ExportPng(string fileName, int width = 600, int height = 400)
+    private PlotModel PieChartSeries()
     {
+        var plotModel = new PlotModel { Title = this.Title, Background = OxyColors.White };
+
+        var ps = new PieSeries
+        {
+            StrokeThickness = 2.0,
+            InsideLabelPosition = 0.8,
+            AngleSpan = 360,
+            StartAngle = 0
+        };
+
+        ps.Slices.Add(new PieSlice("Africa", 1030) { IsExploded = true });
+        ps.Slices.Add(new PieSlice("Americas", 929) { IsExploded = true });
+        ps.Slices.Add(new PieSlice("Asia", 4157));
+        ps.Slices.Add(new PieSlice("Europe", 739) { IsExploded = true });
+        ps.Slices.Add(new PieSlice("Oceania", 35) { IsExploded = true });
+
+        plotModel.Series.Add(ps);
+
+        return plotModel;
+    }
+
+    public void ExportPng(string fileName, int plotStyle, int width = 600, int height = 400)
+    {
+        PlotModel pm;
+        switch (plotStyle)
+        {
+            case 1: pm = LineBarSeries(); break;
+            case 2: pm = PieChartSeries(); break;
+            default: throw new NullReferenceException("Plot style null.");
+        }
+
         if (!fileName.Contains(".png"))
             fileName += ".png";
 
-        if (plotModel != null)
-            PngExporter.Export(plotModel, fileName, width, height);
+        if (pm != null)
+            PngExporter.Export(pm, fileName, width, height);
     }
 
 
     public string Title { get; set; }
 
-    public List<float> Data { get; set; }
+    public List<float> LineData { get; set; }
 
-    public List<DateTime> Dates { get; set; }
+    public List<DateTime> LineDates { get; set; }
 
 
 }
