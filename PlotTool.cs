@@ -5,11 +5,6 @@ using OxyPlot.ImageSharp;
 using OxyPlot.Series;
 using OxyPlot.Axes;
 
-/* OxyPlot dependencies. 
-dotnet add package OxyPlot.Core --version 2.1.0
-dotnet add package OxyPlot.ImageSharp --version 2.1.0
-*/
-
 public class PlotTool
 {
     // linear bar series constructor.

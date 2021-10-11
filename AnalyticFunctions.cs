@@ -116,8 +116,8 @@ public class AnalyticFunctions
     public static void WeeklyTransactions(MySqlDataReader reader)
     {
         var dict = new Dictionary<DateTime, float>();
+        var today = DateTime.Now.Date;
 
-        var today = new DateTime(2021, 2, 16);
         for (int i = 0; i < 7; i++)
             dict[today.AddDays(-i)] = 0;
 
