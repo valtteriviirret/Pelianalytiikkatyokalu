@@ -8,3 +8,4 @@ netstandard2.1
 obj
 v4.5.2
 v4.8
+*.png

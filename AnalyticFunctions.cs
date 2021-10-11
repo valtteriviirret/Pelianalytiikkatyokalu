@@ -68,7 +68,7 @@ public class AnalyticFunctions
                     starts.Add(reader.GetDateTime(i));
                 else
                     if (!reader.IsDBNull(i))
-                        ends.Add(reader.GetDateTime(i));
+                    ends.Add(reader.GetDateTime(i));
             }
 
         reader.Close();
@@ -116,8 +116,8 @@ public class AnalyticFunctions
     public static void WeeklyTransactions(MySqlDataReader reader)
     {
         var dict = new Dictionary<DateTime, float>();
+        var today = DateTime.Now.Date;
 
-        var today = new DateTime(2021, 2, 16);
         for (int i = 0; i < 7; i++)
             dict[today.AddDays(-i)] = 0;
 
@@ -198,7 +198,7 @@ public class AnalyticFunctions
         int numericValue;
         bool isNumber = int.TryParse(id, out numericValue);
         string query = "";
-        if(isNumber)
+        if (isNumber)
         {
             query = String.Format(@"SELECT studio_nimi, sessio_id, pelaaja_id, etunimi, sukunimi
                             FROM Pelistudio, Pelisessio, Peli, Pelaaja WHERE Peli.peli_studio = Pelistudio.studio_id 

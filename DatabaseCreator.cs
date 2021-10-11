@@ -11,7 +11,7 @@ public class DatabaseCreator
         CreateaTables();
         Console.Write("Luodaanko esimerkkidataa? (y/n): ");
         string ans = Console.ReadLine();
-        if(ans == "y")
+        if (ans == "y")
             InsertValues();
     }
 
@@ -98,30 +98,31 @@ public class DatabaseCreator
         String query = @"INSERT INTO Pelistudio(studio_nimi) VALUES
                         ('Valve'),
                         ('DICE'),
-                        ('Pirkka'),
-                        ('Lidl'),
-                        ('Rainbow');
+                        ('Bandai Namco'),
+                        ('Nintendo'),
+                        ('Rockstar Games'),
+                        ('Ubisoft'),
+                        ('Capcom'),
+                        ('Activision Blizzard');
                         
                         INSERT INTO Pelaaja(etunimi, sukunimi, email) VALUES
                         ('Jere', 'Vuola', 'jere.vuola@metropolia.fi'),
                         ('Santeri', 'Hytönen', 'santeri.hytonen@metropolia.fi'),
                         ('Valtteri', 'Viirret', 'valtteri.viirret@metropolia.fi'),
                         ('Erkki', 'Esimerkki', 'erkki.esimerkki@maansiirtovirma.fi'),
-                        ('Mikko', 'Mallikas', 'mikko.mallikas@hotmail.com');
-
-                        INSERT INTO Pelistudio(studio_nimi) VALUES
-                        ('Valve'),
-                        ('DICE'),
-                        ('Pirkka'),
-                        ('Lidl'),
-                        ('Rainbow');
+                        ('Mikko', 'Mallikas', 'mikko.mallikas@hotmail.com'),
+                        ('Ismo', 'Taalasmaa', 'ismo.taalasmaa@salattu.fi'),
+                        ('Pentti', 'Pouta', 'pentti.pouta@pilvinen.fi');
 
                         INSERT INTO Peli(peli_nimi, peli_studio) VALUES
-                        ('Modern battle tactics 2: Vuola\'s revenge', 3),
-                        ('Bloons tower defense 6', 5),
                         ('Counter Strike: Global Offensive', 1),
-                        ('Rainbow Six: Siege', 5),
-                        ('Cookie Clicker', 5);
+                        ('Battlefield V', 2),
+                        ('Pac-Man', 3),
+                        ('Mario Kart 8 Deluxe', 4),
+                        ('Grand Theft Auto 5', 5),
+                        ('Rainbow Six: Siege', 6),
+                        ('Resident Evil Village', 7),
+                        ('World of Warcraft', 8);
 
                         INSERT INTO Pelitapahtuma_tyyppi(tyyppi_nimi) VALUES
                         ('Taso aloitettu'),
@@ -131,40 +132,63 @@ public class DatabaseCreator
                         ('Pelihahmon tason nousu');
 
                         INSERT INTO Pelisessio(alkuaika, loppuaika, peli_id, pelisessio_pelaaja_id) VALUES
-                        ('2021-02-10 20:20:45', '2021-02-10 20:22:45', 1, 1),
-                        ('2021-02-10 20:10:15', '2021-02-10 21:20:05', 1, 1),
-                        ('2021-02-10 21:00:12', '2021-02-10 21:02:12', 5, 5),
-                        ('2021-04-23 23:33:22', '2021-04-24 04:33:22', 4, 2),
-                        ('2021-05-20 10:22:32', '2021-05-20 12:22:12', 1, 1),
-                        ('2021-05-21 23:55:12', null, 1, 1);
+                        ('2021-10-08 16:20:45', '2021-10-08 19:02:45', 1, 2),
+                        ('2021-10-08 18:10:15', '2021-10-08 23:20:05', 2, 3),
+                        ('2021-10-09 13:00:12', '2021-10-09 14:05:12', 3, 4),
+                        ('2021-10-10 15:33:22', '2021-10-10 18:33:22', 4, 5),
+                        ('2021-10-10 19:22:32', '2021-10-10 23:22:12', 5, 6),
+                        ('2021-10-10 20:20:45', '2021-10-10 20:59:45', 6, 7),
+                        ('2021-10-10 23:10:15', '2021-10-11 01:20:05', 7, 4),
+                        ('2021-10-11 11:00:12', '2021-10-11 14:02:12', 8, 1),
+                        ('2021-10-11 18:33:22', '2021-10-11 04:33:22', 1, 2),
+                        ('2021-10-12 01:55:12', null, 1, 1);
 
                         INSERT INTO Pelitapahtuma(aikaleima, tapahtuma_tyyppi_id, sessio_id) VALUES
-                        ('2021-02-10 20:10:15', 1, 1),
-                        ('2021-02-10 20:20:45', 3, 1),
-                        ('2021-02-10 21:01:12', 2, 1),
-                        ('2021-02-9 15:15:20', 5, 2),
-                        ('2021-02-9 17:34:01', 4, 2);
+                        ('2021-10-08 16:25:45', 1, 1),
+                        ('2021-10-08 17:10:15', 3, 1),
+                        ('2021-10-08 17:30:05', 3, 1),
+                        ('2021-10-08 17:40:09', 3, 1),
+                        ('2021-10-08 19:00:12', 2, 1),
+
+                        ('2021-10-08 18:20:22', 1, 2),
+                        ('2021-10-08 20:10:15', 3, 2),
+                        ('2021-10-08 23:15:32', 2, 2),
+
+                        ('2021-10-09 13:20:45', 1, 3),
+                        ('2021-10-09 13:30:15', 4, 3),
+                        ('2021-10-09 13:35:15', 3, 3),
+                        ('2021-10-09 13:50:12', 5, 3),
+                        ('2021-10-09 14:00:22', 3, 3),
+
+                        ('2021-10-10 15:35:45', 1, 4),
+                        ('2021-10-10 18:30:22', 2, 4);
+
 
                         INSERT INTO Rahasiirto(summa, aikaleima, sessio) VALUES
-                        (49.99, '2021-02-10 20:32:25', 1),
-                        (9.99, '2021-02-13 11:36:15', 2),
-                        (4.99, '2021-02-15 17:33:40', 3),
-                        (299.99, '2021-02-16 23:32:05', 4),
-                        (99.99, '2021-02-16 14:36:59', 4),
-                        (69.69, '2021-10-9 15:15:15', 4),
-                        (70.69, '2021-10-8 15:15:15', 4),
-                        (72.69, '2021-10-7 15:15:15', 4),
-                        (75.69, '2021-10-6 15:15:15', 4);
+                        (4.99, '2021-10-08 17:15:15', 1),
+                        (9.99, '2021-10-08 17:35:05', 1),
+                        (4.99, '2021-10-08 17:42:09', 1),
+
+                        (49.99, '2021-10-08 20:10:15', 2),
+                        (19.99, '2021-10-08 20:11:35', 2),
+                        (69.69, '2021-10-08 20:19:05', 2),
+
+                        (9.99, '2021-10-09 13:30:54', 3),
+
+                        (24.99, '2021-10-10 15:50:45', 4),
+                        (10.99, '2021-10-10 16:25:15', 4);
 
 
                         INSERT INTO Pelaa(nimimerkki, pelaaja_id, peli_id) VALUES
-                        ('xxxGamerxxx', 1, 1),
-                        ('NormalDude', 3, 5),
-                        ('Grunder', 1, 3),
-                        ('VelatonMies', 1, 2),
-                        ('HäkkerMän', 3, 2);
+                        ('xxxGamerxxx', 2, 1),
+                        ('NormalDude', 3, 2),
+                        ('Grunder', 4, 3),
+                        ('VelatonMies', 1, 8),
+                        ('Rattler', 5, 4),
+                        ('DeathMachine', 6, 5),
+                        ('BaldGuy', 7, 7);
                         ";
-            
+
         MySqlCommand cmd = new MySqlCommand(query, cnn);
         cmd.ExecuteNonQuery();
     }
